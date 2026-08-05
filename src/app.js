@@ -1,0 +1,108 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+
+const logger = require('./config/logger');
+const routes = require('./routes');
+const swaggerDocument = require('./docs/swagger');
+const errorHandler = require('./middlewares/errorHandler');
+const HTTP_CODES = require('./constants/httpCodes');
+const ERROR_CODES = require('./constants/errorCodes');
+const ApiResponse = require('./utils/apiResponse');
+
+const app = express();
+
+// Enable security headers
+app.use(helmet());
+
+// Enable CORS
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']
+  })
+);
+
+// Body Parsers
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Cookie Parser
+app.use(cookieParser());
+
+// Custom HTTP request logger middleware
+app.use((req, res, next) => {
+  logger.http(`${req.method} ${req.originalUrl} - IP: ${req.ip}`);
+  next();
+});
+
+// Basic Mongo Injection protection placeholder
+// In Mongoose, queries are typed, but we can sanitize user inputs in services.
+app.use((req, res, next) => {
+  // Simple check for MongoDB operators in keys to mitigate query injection
+  const sanitize = (obj) => {
+    if (obj && typeof obj === 'object') {
+      for (const key in obj) {
+        if (key.startsWith('$')) {
+          delete obj[key];
+        } else {
+          sanitize(obj[key]);
+        }
+      }
+    }
+  };
+  sanitize(req.body);
+  sanitize(req.query);
+  sanitize(req.params);
+  next();
+});
+
+// Rate Limiter
+const limiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000', 10), // 15 mins
+  max: parseInt(process.env.RATE_LIMIT_MAX || '100', 10), // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again later',
+    data: null,
+    errors: [
+      {
+        field: 'rate-limit',
+        message: 'Rate limit exceeded'
+      }
+    ]
+  }
+});
+app.use('/api/', limiter);
+
+// Mount API routes
+app.use('/api', routes);
+
+// Swagger Documentation Route
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Catch-all route for unmatched paths (404)
+app.use((req, res, next) => {
+  res.status(HTTP_CODES.NOT_FOUND).json({
+    success: false,
+    message: `Cannot ${req.method} ${req.originalUrl}`,
+    data: null,
+    errors: [
+      {
+        field: 'path',
+        message: 'Resource path not found'
+      }
+    ]
+  });
+});
+
+// Centralized Global Error Handler
+app.use(errorHandler);
+
+module.exports = app;
