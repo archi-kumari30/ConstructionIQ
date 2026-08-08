@@ -38,7 +38,6 @@ const MaterialSchema = new mongoose.Schema(
 );
 
 // Indexes
-MaterialSchema.index({ name: 1 });
 MaterialSchema.index({ isDeleted: 1 });
 
 module.exports = mongoose.model('Material', MaterialSchema);

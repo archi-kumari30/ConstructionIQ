@@ -84,6 +84,14 @@ app.use('/api/', limiter);
 // Mount API routes
 app.use('/api', routes);
 
+// Root endpoint for a quick server availability check
+app.get('/', (req, res) => {
+  return ApiResponse.success(res, 'ConstructionIQ API is running', {
+    health: '/api/v1/health',
+    documentation: '/api/v1/docs'
+  });
+});
+
 // Swagger Documentation Route
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

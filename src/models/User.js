@@ -69,7 +69,6 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Mongoose Indexes
-UserSchema.index({ email: 1 });
 UserSchema.index({ isDeleted: 1 });
 
 // Instance method to compare password
