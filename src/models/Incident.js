@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const IncidentSchema = new mongoose.Schema(
   {
@@ -51,4 +51,4 @@ const IncidentSchema = new mongoose.Schema(
 IncidentSchema.index({ projectId: 1, severity: 1 });
 IncidentSchema.index({ status: 1 });
 
-module.exports = mongoose.model('Incident', IncidentSchema);
+export default mongoose.model('Incident', IncidentSchema);

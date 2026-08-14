@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const EquipmentSchema = new mongoose.Schema(
   {
@@ -39,4 +39,4 @@ EquipmentSchema.index({ type: 1 });
 EquipmentSchema.index({ status: 1 });
 EquipmentSchema.index({ isDeleted: 1 });
 
-module.exports = mongoose.model('Equipment', EquipmentSchema);
+export default mongoose.model('Equipment', EquipmentSchema);

@@ -1,10 +1,10 @@
-const reportService = require('../services/reportService');
-const ApiResponse = require('../utils/apiResponse');
-const DailySiteReportDto = require('../dto/dailySiteReportDto');
-const IncidentDto = require('../dto/incidentDto');
-const AiInsightDto = require('../dto/aiInsightDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import reportService from '../services/reportService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import DailySiteReportDto from '../dto/dailySiteReportDto.js';
+import IncidentDto from '../dto/incidentDto.js';
+import AiInsightDto from '../dto/aiInsightDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Daily Site Reports ---
 const compileDailyReport = asyncWrapper(async (req, res) => {
@@ -108,7 +108,7 @@ const listInsights = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   compileDailyReport,
   getDailyReport,
   listDailyReports,
@@ -118,3 +118,4 @@ module.exports = {
   listIncidents,
   listInsights
 };
+export default { compileDailyReport, getDailyReport, listDailyReports, logIncident, updateIncident, getIncident, listIncidents, listInsights };

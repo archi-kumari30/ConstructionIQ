@@ -1,17 +1,18 @@
-const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const userRepository = require('../repositories/userRepository');
-const mailService = require('./mailService');
-const auditLogService = require('./auditLogService');
-const jwtConfig = require('../config/jwt');
-const {
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import userRepository from '../repositories/userRepository.js';
+import mailService from './mailService.js';
+import auditLogService from './auditLogService.js';
+import jwtConfig from '../config/jwt.js';
+import {
   ConflictError,
   UnauthorizedError,
   NotFoundError,
   BadRequestError
-} = require('../utils/customErrors');
-const logger = require('../config/logger');
+} from '../utils/customErrors.js';
+import logger from '../config/logger.js';
+import User from '../models/User.js';
 
 class AuthService {
   // Helper to generate access token
@@ -47,6 +48,7 @@ class AuthService {
 
     // Create verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
+    console.log("VERIFICATION TOKEN:", verificationToken);
 
     // Create the user
     const newUser = await userRepository.create({
@@ -132,7 +134,6 @@ class AuthService {
   }
 
   async verifyEmail(token) {
-    const User = require('../models/User'); // Load model directly to do save
     const user = await User.findOne({ verificationToken: token, isDeleted: false });
     
     if (!user) {
@@ -155,7 +156,6 @@ class AuthService {
   }
 
   async forgotPassword(email) {
-    const User = require('../models/User');
     const user = await User.findOne({ email, isDeleted: false });
     
     // For security, do not leak user existence (just return true)
@@ -166,6 +166,7 @@ class AuthService {
 
     // Generate reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
+    console.log("RESET TOKEN:", resetToken);
     
     // Hash token and set expiry
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
@@ -188,7 +189,6 @@ class AuthService {
   }
 
   async resetPassword(token, newPassword) {
-    const User = require('../models/User');
     
     // Hash incoming token to match stored version
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -224,4 +224,4 @@ class AuthService {
   }
 }
 
-module.exports = new AuthService();
+export default new AuthService();

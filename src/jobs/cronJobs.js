@@ -1,10 +1,10 @@
-const cron = require('node-cron');
-const projectRepository = require('../repositories/projectRepository');
-const budgetRepository = require('../repositories/budgetRepository');
-const expenseRepository = require('../repositories/expenseRepository');
-const incidentRepository = require('../repositories/incidentRepository');
-const aiInsightRepository = require('../repositories/aiInsightRepository');
-const logger = require('../config/logger');
+import cron from 'node-cron';
+import projectRepository from '../repositories/projectRepository.js';
+import budgetRepository from '../repositories/budgetRepository.js';
+import expenseRepository from '../repositories/expenseRepository.js';
+import incidentRepository from '../repositories/incidentRepository.js';
+import aiInsightRepository from '../repositories/aiInsightRepository.js';
+import logger from '../config/logger.js';
 
 // Run weekly project data audits: every Sunday at 00:00 (midnight)
 const scheduleWeeklyAudit = () => {
@@ -63,6 +63,7 @@ const scheduleWeeklyAudit = () => {
   logger.info('[Cron] Weekly operations audit scheduled (Sunday 00:00)');
 };
 
-module.exports = {
+export {
   scheduleWeeklyAudit
 };
+export default { scheduleWeeklyAudit };

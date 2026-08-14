@@ -1,4 +1,4 @@
-const Worker = require('../models/Worker');
+import Worker from '../models/Worker.js';
 
 class WorkerRepository {
   async findById(id) {
@@ -66,4 +66,4 @@ class WorkerRepository {
   }
 }
 
-module.exports = new WorkerRepository();
+export default new WorkerRepository();

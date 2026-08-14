@@ -1,4 +1,4 @@
-const ProjectTeam = require('../models/ProjectTeam');
+import ProjectTeam from '../models/ProjectTeam.js';
 
 class ProjectTeamRepository {
   async addMember(memberData) {
@@ -37,4 +37,4 @@ class ProjectTeamRepository {
   }
 }
 
-module.exports = new ProjectTeamRepository();
+export default new ProjectTeamRepository();

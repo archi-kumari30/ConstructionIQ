@@ -1,4 +1,4 @@
-const EquipmentUsageLog = require('../models/EquipmentUsageLog');
+import EquipmentUsageLog from '../models/EquipmentUsageLog.js';
 
 class EquipmentUsageLogRepository {
   async create(usageData) {
@@ -55,4 +55,4 @@ class EquipmentUsageLogRepository {
   }
 }
 
-module.exports = new EquipmentUsageLogRepository();
+export default new EquipmentUsageLogRepository();

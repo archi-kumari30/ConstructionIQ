@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   host: process.env.MAIL_HOST || 'smtp.mailtrap.io',
   port: parseInt(process.env.MAIL_PORT || '2525', 10),
   user: process.env.MAIL_USER || '',

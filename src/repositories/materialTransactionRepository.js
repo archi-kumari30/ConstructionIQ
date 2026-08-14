@@ -1,4 +1,4 @@
-const MaterialTransaction = require('../models/MaterialTransaction');
+import MaterialTransaction from '../models/MaterialTransaction.js';
 
 class MaterialTransactionRepository {
   async create(transactionData, session = null) {
@@ -34,4 +34,4 @@ class MaterialTransactionRepository {
   }
 }
 
-module.exports = new MaterialTransactionRepository();
+export default new MaterialTransactionRepository();

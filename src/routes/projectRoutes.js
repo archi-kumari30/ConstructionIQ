@@ -1,56 +1,56 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const projectController = require('../controllers/projectController');
-const { protect } = require('../middlewares/authMiddleware');
-const { authorize } = require('../middlewares/rbacMiddleware');
-const { checkProjectAccess } = require('../middlewares/rlacMiddleware');
-const validate = require('../validators/validate');
-const {
+import projectController from '../controllers/projectController.js';
+import { protect } from '../middlewares/authMiddleware.js';
+import { authorize } from '../middlewares/rbacMiddleware.js';
+import { checkProjectAccess } from '../middlewares/rlacMiddleware.js';
+import validate from '../validators/validate.js';
+import {
   createProjectSchema,
   updateProjectSchema,
   addTeamMemberSchema,
   createMilestoneSchema,
   updateMilestoneSchema
-} = require('../validators/projectValidator');
-const ROLES = require('../constants/roles');
+} from '../validators/projectValidator.js';
+import ROLES from '../constants/roles.js';
 
 // Apply protection to all project routes
 router.use(protect);
 
-const materialController = require('../controllers/materialController');
-const {
+import materialController from '../controllers/materialController.js';
+import {
   logTransactionSchema,
   createRequestSchema,
   approveRequestSchema,
   updateThresholdSchema
-} = require('../validators/materialValidator');
+} from '../validators/materialValidator.js';
 
-const equipmentController = require('../controllers/equipmentController');
-const {
+import equipmentController from '../controllers/equipmentController.js';
+import {
   createBookingSchema,
   logUsageSchema
-} = require('../validators/equipmentValidator');
+} from '../validators/equipmentValidator.js';
 
-const workerController = require('../controllers/workerController');
-const {
+import workerController from '../controllers/workerController.js';
+import {
   logAttendanceSchema
-} = require('../validators/workerValidator');
+} from '../validators/workerValidator.js';
 
-const financeController = require('../controllers/financeController');
-const {
+import financeController from '../controllers/financeController.js';
+import {
   createDeliverySchema,
   updateDeliveryStatusSchema,
   createBudgetSchema,
   createExpenseSchema
-} = require('../validators/financeValidator');
+} from '../validators/financeValidator.js';
 
-const reportController = require('../controllers/reportController');
-const { parser, uploadAndCompressImages } = require('../middlewares/uploadMiddleware');
-const {
+import reportController from '../controllers/reportController.js';
+import { parser, uploadAndCompressImages } from '../middlewares/uploadMiddleware.js';
+import {
   createIncidentSchema,
   updateIncidentSchema,
   createDailyReportSchema
-} = require('../validators/reportValidator');
+} from '../validators/reportValidator.js';
 
 // --- Project CRUD ---
 router.post(
@@ -276,4 +276,4 @@ router.post(
 // --- AI Insights ---
 router.get('/:projectId/insights', checkProjectAccess, reportController.listInsights);
 
-module.exports = router;
+export default router;

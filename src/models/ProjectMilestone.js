@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const ProjectMilestoneSchema = new mongoose.Schema(
   {
@@ -42,4 +42,4 @@ const ProjectMilestoneSchema = new mongoose.Schema(
 ProjectMilestoneSchema.index({ projectId: 1, status: 1 });
 ProjectMilestoneSchema.index({ isDeleted: 1 });
 
-module.exports = mongoose.model('ProjectMilestone', ProjectMilestoneSchema);
+export default mongoose.model('ProjectMilestone', ProjectMilestoneSchema);

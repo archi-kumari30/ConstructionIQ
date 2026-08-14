@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const ROLES = require('../constants/roles');
+import Joi from 'joi';
+import ROLES from '../constants/roles.js';
 
 const registerSchema = Joi.object({
   name: Joi.string().required().min(2).max(100).messages({
@@ -57,10 +57,11 @@ const resetPasswordSchema = Joi.object({
   })
 });
 
-module.exports = {
+export {
   registerSchema,
   loginSchema,
   refreshTokenSchema,
   forgotPasswordSchema,
   resetPasswordSchema
 };
+export default { registerSchema, loginSchema, refreshTokenSchema, forgotPasswordSchema, resetPasswordSchema };

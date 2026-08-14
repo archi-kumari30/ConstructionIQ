@@ -1,4 +1,4 @@
-const ProjectMilestone = require('../models/ProjectMilestone');
+import ProjectMilestone from '../models/ProjectMilestone.js';
 
 class ProjectMilestoneRepository {
   async findById(id) {
@@ -54,4 +54,4 @@ class ProjectMilestoneRepository {
   }
 }
 
-module.exports = new ProjectMilestoneRepository();
+export default new ProjectMilestoneRepository();

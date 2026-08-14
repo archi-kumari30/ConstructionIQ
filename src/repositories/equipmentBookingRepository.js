@@ -1,4 +1,4 @@
-const EquipmentBooking = require('../models/EquipmentBooking');
+import EquipmentBooking from '../models/EquipmentBooking.js';
 
 class EquipmentBookingRepository {
   async findById(id) {
@@ -85,4 +85,4 @@ class EquipmentBookingRepository {
   }
 }
 
-module.exports = new EquipmentBookingRepository();
+export default new EquipmentBookingRepository();

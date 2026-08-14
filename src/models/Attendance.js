@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const AttendanceSchema = new mongoose.Schema(
   {
@@ -41,4 +41,4 @@ const AttendanceSchema = new mongoose.Schema(
 AttendanceSchema.index({ workerId: 1, projectId: 1, date: 1 }, { unique: true });
 AttendanceSchema.index({ date: -1 });
 
-module.exports = mongoose.model('Attendance', AttendanceSchema);
+export default mongoose.model('Attendance', AttendanceSchema);

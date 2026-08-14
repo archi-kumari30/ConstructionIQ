@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const ApiResponse = require('../utils/apiResponse');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import mongoose from 'mongoose';
+import ApiResponse from '../utils/apiResponse.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 const checkHealth = asyncWrapper(async (req, res) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'UP' : 'DOWN';
@@ -23,6 +23,7 @@ const checkHealth = asyncWrapper(async (req, res) => {
   return ApiResponse.success(res, 'System is healthy', healthData, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   checkHealth
 };
+export default { checkHealth };

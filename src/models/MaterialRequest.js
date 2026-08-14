@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const MaterialRequestSchema = new mongoose.Schema(
   {
@@ -46,4 +46,4 @@ MaterialRequestSchema.index({ projectId: 1, status: 1 });
 MaterialRequestSchema.index({ requestedBy: 1 });
 MaterialRequestSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.model('MaterialRequest', MaterialRequestSchema);
+export default mongoose.model('MaterialRequest', MaterialRequestSchema);

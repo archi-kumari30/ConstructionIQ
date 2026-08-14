@@ -1,4 +1,4 @@
-const MaterialRequest = require('../models/MaterialRequest');
+import MaterialRequest from '../models/MaterialRequest.js';
 
 class MaterialRequestRepository {
   async findById(id, session = null) {
@@ -67,4 +67,4 @@ class MaterialRequestRepository {
   }
 }
 
-module.exports = new MaterialRequestRepository();
+export default new MaterialRequestRepository();

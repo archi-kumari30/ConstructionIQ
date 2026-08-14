@@ -22,4 +22,4 @@ class AiInsightDto {
   }
 }
 
-module.exports = AiInsightDto;
+export default AiInsightDto;

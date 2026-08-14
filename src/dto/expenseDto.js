@@ -29,4 +29,4 @@ class ExpenseDto {
   }
 }
 
-module.exports = ExpenseDto;
+export default ExpenseDto;

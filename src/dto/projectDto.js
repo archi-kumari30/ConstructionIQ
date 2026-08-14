@@ -34,4 +34,4 @@ class ProjectDto {
   }
 }
 
-module.exports = ProjectDto;
+export default ProjectDto;

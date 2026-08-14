@@ -1,10 +1,10 @@
-const projectService = require('../services/projectService');
-const ApiResponse = require('../utils/apiResponse');
-const ProjectDto = require('../dto/projectDto');
-const ProjectTeamDto = require('../dto/projectTeamDto');
-const ProjectMilestoneDto = require('../dto/projectMilestoneDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import projectService from '../services/projectService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import ProjectDto from '../dto/projectDto.js';
+import ProjectTeamDto from '../dto/projectTeamDto.js';
+import ProjectMilestoneDto from '../dto/projectMilestoneDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Project Endpoints ---
 const createProject = asyncWrapper(async (req, res) => {
@@ -140,7 +140,7 @@ const listMilestones = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   createProject,
   updateProject,
   deleteProject,
@@ -154,3 +154,4 @@ module.exports = {
   deleteMilestone,
   listMilestones
 };
+export default { createProject, updateProject, deleteProject, getProject, listProjects, addTeamMember, removeTeamMember, getTeamMembers, addMilestone, updateMilestone, deleteMilestone, listMilestones };

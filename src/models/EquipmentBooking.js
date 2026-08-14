@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const EquipmentBookingSchema = new mongoose.Schema(
   {
@@ -41,4 +41,4 @@ EquipmentBookingSchema.index({ equipmentId: 1, status: 1 });
 EquipmentBookingSchema.index({ projectId: 1 });
 EquipmentBookingSchema.index({ startTime: 1, endTime: 1 });
 
-module.exports = mongoose.model('EquipmentBooking', EquipmentBookingSchema);
+export default mongoose.model('EquipmentBooking', EquipmentBookingSchema);

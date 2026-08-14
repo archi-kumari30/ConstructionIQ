@@ -1,4 +1,4 @@
-const MaterialInventory = require('../models/MaterialInventory');
+import MaterialInventory from '../models/MaterialInventory.js';
 
 class MaterialInventoryRepository {
   async findByProjectAndMaterial(projectId, materialId, session = null) {
@@ -65,4 +65,4 @@ class MaterialInventoryRepository {
   }
 }
 
-module.exports = new MaterialInventoryRepository();
+export default new MaterialInventoryRepository();

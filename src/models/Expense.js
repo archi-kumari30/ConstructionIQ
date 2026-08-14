@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ExpenseSchema = new mongoose.Schema(
   {
@@ -51,4 +51,4 @@ const ExpenseSchema = new mongoose.Schema(
 ExpenseSchema.index({ projectId: 1, category: 1, date: -1 });
 ExpenseSchema.index({ aiAnomalyFlag: 1 });
 
-module.exports = mongoose.model('Expense', ExpenseSchema);
+export default mongoose.model('Expense', ExpenseSchema);

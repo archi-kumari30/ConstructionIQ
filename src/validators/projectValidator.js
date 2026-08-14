@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
@@ -75,10 +75,11 @@ const updateMilestoneSchema = Joi.object({
   status: Joi.string().valid(...Object.values(STATUS.MILESTONE)).optional()
 });
 
-module.exports = {
+export {
   createProjectSchema,
   updateProjectSchema,
   addTeamMemberSchema,
   createMilestoneSchema,
   updateMilestoneSchema
 };
+export default { createProjectSchema, updateProjectSchema, addTeamMemberSchema, createMilestoneSchema, updateMilestoneSchema };

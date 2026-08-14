@@ -1,7 +1,7 @@
 /**
  * Standard API Response utility functions
  */
-const HTTP_CODES = require('../constants/httpCodes');
+import HTTP_CODES from '../constants/httpCodes.js';
 
 class ApiResponse {
   static success(res, message = 'Success', data = null, statusCode = HTTP_CODES.OK) {
@@ -23,4 +23,4 @@ class ApiResponse {
   }
 }
 
-module.exports = ApiResponse;
+export default ApiResponse;

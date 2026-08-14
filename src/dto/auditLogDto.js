@@ -27,4 +27,4 @@ class AuditLogDto {
   }
 }
 
-module.exports = AuditLogDto;
+export default AuditLogDto;

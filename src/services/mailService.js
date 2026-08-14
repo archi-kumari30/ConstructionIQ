@@ -1,5 +1,5 @@
-const logger = require('../config/logger');
-const mailConfig = require('../config/mail');
+import logger from '../config/logger.js';
+import mailConfig from '../config/mail.js';
 
 class MailService {
   async sendEmail({ to, subject, text, html }) {
@@ -38,4 +38,4 @@ class MailService {
   }
 }
 
-module.exports = new MailService();
+export default new MailService();

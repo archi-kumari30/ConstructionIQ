@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const EquipmentUsageLogSchema = new mongoose.Schema(
   {
@@ -35,4 +35,4 @@ const EquipmentUsageLogSchema = new mongoose.Schema(
 EquipmentUsageLogSchema.index({ equipmentId: 1, date: -1 });
 EquipmentUsageLogSchema.index({ projectId: 1, date: -1 });
 
-module.exports = mongoose.model('EquipmentUsageLog', EquipmentUsageLogSchema);
+export default mongoose.model('EquipmentUsageLog', EquipmentUsageLogSchema);

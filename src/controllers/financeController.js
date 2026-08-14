@@ -1,16 +1,15 @@
-const financeService = require('../services/financeService');
-const ApiResponse = require('../utils/apiResponse');
-const DeliveryDto = require('../dto/deliveryDto');
-const BudgetDto = require('../dto/budgetDto');
-const ExpenseDto = require('../dto/expenseDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import financeService from '../services/financeService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import DeliveryDto from '../dto/deliveryDto.js';
+import BudgetDto from '../dto/budgetDto.js';
+import ExpenseDto from '../dto/expenseDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Deliveries ---
 const createDelivery = asyncWrapper(async (req, res) => {
   const { projectId } = req.params;
-  const delivery = await financeService.createDelivery(projectId, req.body, req.user._id);
-  return ApiResponse.success(
+const delivery = await financeService.createDelivery(projectId, req.body, req.body.supplierId);  return ApiResponse.success(
     res,
     'Logistics shipment entry created successfully',
     DeliveryDto.toResponse(delivery),
@@ -98,7 +97,7 @@ const listExpenses = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   createDelivery,
   updateDeliveryStatus,
   listDeliveries,
@@ -107,3 +106,4 @@ module.exports = {
   logExpense,
   listExpenses
 };
+export default { createDelivery, updateDeliveryStatus, listDeliveries, allocateBudget, getBudgetSummary, logExpense, listExpenses };

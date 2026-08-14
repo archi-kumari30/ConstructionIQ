@@ -1,4 +1,4 @@
-const Expense = require('../models/Expense');
+import Expense from '../models/Expense.js';
 
 class ExpenseRepository {
   async create(expenseData, session = null) {
@@ -42,4 +42,4 @@ class ExpenseRepository {
   }
 }
 
-module.exports = new ExpenseRepository();
+export default new ExpenseRepository();

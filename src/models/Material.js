@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const MaterialSchema = new mongoose.Schema(
   {
@@ -40,4 +40,4 @@ const MaterialSchema = new mongoose.Schema(
 // Indexes
 MaterialSchema.index({ isDeleted: 1 });
 
-module.exports = mongoose.model('Material', MaterialSchema);
+export default mongoose.model('Material', MaterialSchema);

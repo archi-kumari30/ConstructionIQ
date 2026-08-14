@@ -1,4 +1,4 @@
-const EquipmentDto = require('./equipmentDto');
+import EquipmentDto from './equipmentDto.js';
 
 /**
  * Equipment Usage Telemetry Log Data Transfer Object
@@ -23,4 +23,4 @@ class EquipmentUsageLogDto {
   }
 }
 
-module.exports = EquipmentUsageLogDto;
+export default EquipmentUsageLogDto;

@@ -1,8 +1,8 @@
-const projectRepository = require('../repositories/projectRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const { ForbiddenError, NotFoundError } = require('../utils/customErrors');
-const ROLES = require('../constants/roles');
-const asyncWrapper = require('../utils/asyncWrapper');
+import projectRepository from '../repositories/projectRepository.js';
+import projectTeamRepository from '../repositories/projectTeamRepository.js';
+import { ForbiddenError, NotFoundError } from '../utils/customErrors.js';
+import ROLES from '../constants/roles.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 const checkProjectAccess = asyncWrapper(async (req, res, next) => {
   // Extract project ID from typical parameters
@@ -51,6 +51,7 @@ const checkProjectAccess = asyncWrapper(async (req, res, next) => {
   throw new ForbiddenError('Access Denied: You are not assigned to this project workspace team');
 });
 
-module.exports = {
+export {
   checkProjectAccess
 };
+export default { checkProjectAccess };

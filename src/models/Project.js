@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const ProjectSchema = new mongoose.Schema(
   {
@@ -71,4 +71,4 @@ ProjectSchema.index({ managerId: 1 });
 ProjectSchema.index({ status: 1 });
 ProjectSchema.index({ isDeleted: 1 });
 
-module.exports = mongoose.model('Project', ProjectSchema);
+export default mongoose.model('Project', ProjectSchema);

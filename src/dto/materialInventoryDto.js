@@ -1,4 +1,4 @@
-const MaterialDto = require('./materialDto');
+import MaterialDto from './materialDto.js';
 
 /**
  * Material Inventory Stock Data Transfer Object
@@ -23,4 +23,4 @@ class MaterialInventoryDto {
   }
 }
 
-module.exports = MaterialInventoryDto;
+export default MaterialInventoryDto;

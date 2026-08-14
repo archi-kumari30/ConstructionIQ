@@ -1,9 +1,9 @@
-const multer = require('multer');
-const sharp = require('sharp');
-const cloudinary = require('cloudinary').v2;
-const cloudinaryConfig = require('../config/cloudinary');
-const { BadRequestError } = require('../utils/customErrors');
-const logger = require('../config/logger');
+import multer from 'multer';
+import sharp from 'sharp';
+import { v2 as cloudinary } from 'cloudinary';
+import cloudinaryConfig from '../config/cloudinary.js';
+import { BadRequestError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
 
 // Configure Cloudinary SDK
 if (cloudinaryConfig.cloudName && cloudinaryConfig.apiKey && cloudinaryConfig.apiSecret) {
@@ -81,7 +81,10 @@ const uploadAndCompressImages = async (req, res, next) => {
   }
 };
 
-module.exports = {
-  parser: upload.array('images', 5), // Max 5 images
+const parser = upload.array('images', 5); // Max 5 images
+
+export {
+  parser,
   uploadAndCompressImages
 };
+export default { parser, uploadAndCompressImages };

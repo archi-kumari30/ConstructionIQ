@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const MaterialTransactionSchema = new mongoose.Schema(
   {
@@ -36,4 +36,4 @@ const MaterialTransactionSchema = new mongoose.Schema(
 MaterialTransactionSchema.index({ projectId: 1, materialId: 1 });
 MaterialTransactionSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.model('MaterialTransaction', MaterialTransactionSchema);
+export default mongoose.model('MaterialTransaction', MaterialTransactionSchema);

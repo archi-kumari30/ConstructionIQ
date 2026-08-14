@@ -1,10 +1,10 @@
-const projectRepository = require('../repositories/projectRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const projectMilestoneRepository = require('../repositories/projectMilestoneRepository');
-const auditLogService = require('./auditLogService');
-const userRepository = require('../repositories/userRepository');
-const { ConflictError, BadRequestError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
+import projectRepository from '../repositories/projectRepository.js';
+import projectTeamRepository from '../repositories/projectTeamRepository.js';
+import projectMilestoneRepository from '../repositories/projectMilestoneRepository.js';
+import auditLogService from './auditLogService.js';
+import userRepository from '../repositories/userRepository.js';
+import { ConflictError, BadRequestError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
 
 class ProjectService {
   // --- Projects ---
@@ -225,4 +225,4 @@ class ProjectService {
   }
 }
 
-module.exports = new ProjectService();
+export default new ProjectService();

@@ -1,4 +1,4 @@
-const DailySiteReport = require('../models/DailySiteReport');
+import DailySiteReport from '../models/DailySiteReport.js';
 
 class DailySiteReportRepository {
   async findById(id) {
@@ -48,4 +48,4 @@ class DailySiteReportRepository {
   }
 }
 
-module.exports = new DailySiteReportRepository();
+export default new DailySiteReportRepository();

@@ -67,4 +67,4 @@ const PERMISSIONS = {
   AUDIT_LOG_READ: 'audit:read'
 };
 
-module.exports = PERMISSIONS;
+export default PERMISSIONS;

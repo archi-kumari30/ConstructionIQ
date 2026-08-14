@@ -22,4 +22,4 @@ class BudgetDto {
   }
 }
 
-module.exports = BudgetDto;
+export default BudgetDto;

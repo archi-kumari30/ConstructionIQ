@@ -1,4 +1,4 @@
-const Budget = require('../models/Budget');
+import Budget from '../models/Budget.js';
 
 class BudgetRepository {
   async findByCategory(projectId, category) {
@@ -30,4 +30,4 @@ class BudgetRepository {
   }
 }
 
-module.exports = new BudgetRepository();
+export default new BudgetRepository();

@@ -1,4 +1,4 @@
-const AuditLog = require('../models/AuditLog');
+import AuditLog from '../models/AuditLog.js';
 
 class AuditLogRepository {
   async create(auditLogData) {
@@ -30,4 +30,4 @@ class AuditLogRepository {
   }
 }
 
-module.exports = new AuditLogRepository();
+export default new AuditLogRepository();

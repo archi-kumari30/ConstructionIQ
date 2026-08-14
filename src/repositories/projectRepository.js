@@ -1,4 +1,4 @@
-const Project = require('../models/Project');
+import Project from '../models/Project.js';
 
 class ProjectRepository {
   async findById(id) {
@@ -66,4 +66,4 @@ class ProjectRepository {
   }
 }
 
-module.exports = new ProjectRepository();
+export default new ProjectRepository();

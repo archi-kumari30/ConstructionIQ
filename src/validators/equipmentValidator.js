@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
@@ -58,10 +58,11 @@ const logUsageSchema = Joi.object({
   fuelUsedLiters: Joi.number().min(0).optional()
 });
 
-module.exports = {
+export {
   createEquipmentSchema,
   updateEquipmentSchema,
   createBookingSchema,
   updateBookingStatusSchema,
   logUsageSchema
 };
+export default { createEquipmentSchema, updateEquipmentSchema, createBookingSchema, updateBookingStatusSchema, logUsageSchema };

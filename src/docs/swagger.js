@@ -1,5 +1,5 @@
-const ROLES = require('../constants/roles');
-const STATUS = require('../constants/status');
+import ROLES from '../constants/roles.js';
+import STATUS from '../constants/status.js';
 
 const swaggerDocument = {
   openapi: '3.0.0',
@@ -483,4 +483,4 @@ const swaggerDocument = {
   }
 };
 
-module.exports = swaggerDocument;
+export default swaggerDocument;

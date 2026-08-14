@@ -1,17 +1,17 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit');
-const swaggerUi = require('swagger-ui-express');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
 
-const logger = require('./config/logger');
-const routes = require('./routes');
-const swaggerDocument = require('./docs/swagger');
-const errorHandler = require('./middlewares/errorHandler');
-const HTTP_CODES = require('./constants/httpCodes');
-const ERROR_CODES = require('./constants/errorCodes');
-const ApiResponse = require('./utils/apiResponse');
+import logger from './config/logger.js';
+import routes from './routes/index.js';
+import swaggerDocument from './docs/swagger.js';
+import errorHandler from './middlewares/errorHandler.js';
+import HTTP_CODES from './constants/httpCodes.js';
+import ERROR_CODES from './constants/errorCodes.js';
+import ApiResponse from './utils/apiResponse.js';
 
 const app = express();
 
@@ -113,4 +113,4 @@ app.use((req, res, next) => {
 // Centralized Global Error Handler
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

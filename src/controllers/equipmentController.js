@@ -1,10 +1,10 @@
-const equipmentService = require('../services/equipmentService');
-const ApiResponse = require('../utils/apiResponse');
-const EquipmentDto = require('../dto/equipmentDto');
-const EquipmentBookingDto = require('../dto/equipmentBookingDto');
-const EquipmentUsageLogDto = require('../dto/equipmentUsageLogDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import equipmentService from '../services/equipmentService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import EquipmentDto from '../dto/equipmentDto.js';
+import EquipmentBookingDto from '../dto/equipmentBookingDto.js';
+import EquipmentUsageLogDto from '../dto/equipmentUsageLogDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Global Fleet ---
 const createEquipment = asyncWrapper(async (req, res) => {
@@ -128,7 +128,7 @@ const listUsageLogs = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   createEquipment,
   updateEquipment,
   deleteEquipment,
@@ -140,3 +140,4 @@ module.exports = {
   logUsage,
   listUsageLogs
 };
+export default { createEquipment, updateEquipment, deleteEquipment, getEquipment, listEquipment, createBooking, updateBookingStatus, listBookings, logUsage, listUsageLogs };

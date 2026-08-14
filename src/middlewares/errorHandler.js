@@ -1,6 +1,6 @@
-const logger = require('../config/logger');
-const HTTP_CODES = require('../constants/httpCodes');
-const ERROR_CODES = require('../constants/errorCodes');
+import logger from '../config/logger.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import ERROR_CODES from '../constants/errorCodes.js';
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.statusCode || HTTP_CODES.INTERNAL_SERVER_ERROR;
@@ -50,4 +50,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = errorHandler;
+export default errorHandler;

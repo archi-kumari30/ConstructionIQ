@@ -1,8 +1,8 @@
-const authService = require('../services/authService');
-const ApiResponse = require('../utils/apiResponse');
-const UserDto = require('../dto/userDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import authService from '../services/authService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import UserDto from '../dto/userDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 const register = asyncWrapper(async (req, res) => {
   const user = await authService.register(req.body);
@@ -67,7 +67,7 @@ const resetPassword = asyncWrapper(async (req, res) => {
   return ApiResponse.success(res, 'Password reset successfully', null, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   register,
   login,
   refreshToken,
@@ -75,3 +75,4 @@ module.exports = {
   forgotPassword,
   resetPassword
 };
+export default { register, login, refreshToken, verifyEmail, forgotPassword, resetPassword };

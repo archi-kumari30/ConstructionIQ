@@ -24,4 +24,4 @@ class ProjectTeamDto {
   }
 }
 
-module.exports = ProjectTeamDto;
+export default ProjectTeamDto;

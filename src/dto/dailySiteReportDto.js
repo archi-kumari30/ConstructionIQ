@@ -43,4 +43,4 @@ class DailySiteReportDto {
   }
 }
 
-module.exports = DailySiteReportDto;
+export default DailySiteReportDto;

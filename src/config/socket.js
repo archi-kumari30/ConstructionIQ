@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
     methods: ['GET', 'POST']

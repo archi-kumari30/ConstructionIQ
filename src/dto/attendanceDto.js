@@ -1,4 +1,4 @@
-const WorkerDto = require('./workerDto');
+import WorkerDto from './workerDto.js';
 
 /**
  * Attendance Log Data Transfer Object
@@ -24,4 +24,4 @@ class AttendanceDto {
   }
 }
 
-module.exports = AttendanceDto;
+export default AttendanceDto;

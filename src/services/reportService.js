@@ -1,12 +1,12 @@
-const dailySiteReportRepository = require('../repositories/dailySiteReportRepository');
-const incidentRepository = require('../repositories/incidentRepository');
-const aiInsightRepository = require('../repositories/aiInsightRepository');
-const projectRepository = require('../repositories/projectRepository');
-const auditLogService = require('./auditLogService');
-const reportQueue = require('../jobs/reportQueue');
-const socketService = require('../socket/socketService');
-const { ConflictError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
+import dailySiteReportRepository from '../repositories/dailySiteReportRepository.js';
+import incidentRepository from '../repositories/incidentRepository.js';
+import aiInsightRepository from '../repositories/aiInsightRepository.js';
+import projectRepository from '../repositories/projectRepository.js';
+import auditLogService from './auditLogService.js';
+import reportQueue from '../jobs/reportQueue.js';
+import socketService from '../socket/socketService.js';
+import { ConflictError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
 
 class ReportService {
   // --- Daily Site Reports ---
@@ -172,4 +172,4 @@ class ReportService {
   }
 }
 
-module.exports = new ReportService();
+export default new ReportService();

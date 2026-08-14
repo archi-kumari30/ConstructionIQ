@@ -1,19 +1,29 @@
-const request = require('supertest');
-const app = require('../app');
-const projectRepository = require('../repositories/projectRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const projectMilestoneRepository = require('../repositories/projectMilestoneRepository');
-const userRepository = require('../repositories/userRepository');
-const auditLogService = require('../services/auditLogService');
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt');
+import { jest } from '@jest/globals';
+
+const createMockModule = () => new Proxy({}, {
+  get(target, key) {
+    if (!(key in target)) target[key] = jest.fn();
+    return target[key];
+  }
+});
+
 
 // Mock dependencies
-jest.mock('../repositories/projectRepository');
-jest.mock('../repositories/projectTeamRepository');
-jest.mock('../repositories/projectMilestoneRepository');
-jest.mock('../repositories/userRepository');
-jest.mock('../services/auditLogService');
+jest.unstable_mockModule('../repositories/projectRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectTeamRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectMilestoneRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/userRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/auditLogService.js', () => ({ default: createMockModule() }));
+
+const request = (await import('supertest')).default;
+const app = (await import('../app.js')).default;
+const projectRepository = (await import('../repositories/projectRepository.js')).default;
+const projectTeamRepository = (await import('../repositories/projectTeamRepository.js')).default;
+const projectMilestoneRepository = (await import('../repositories/projectMilestoneRepository.js')).default;
+const userRepository = (await import('../repositories/userRepository.js')).default;
+const auditLogService = (await import('../services/auditLogService.js')).default;
+const jwt = (await import('jsonwebtoken')).default;
+const jwtConfig = (await import('../config/jwt.js')).default;
 
 describe('Project Workspace Management Endpoints API tests', () => {
   // Mock User Profiles

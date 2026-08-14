@@ -21,4 +21,4 @@ class EquipmentDto {
   }
 }
 
-module.exports = EquipmentDto;
+export default EquipmentDto;

@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const dotenv = require('dotenv');
-const path = require('path');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
-const User = require('../../models/User');
-const ROLES = require('../../constants/roles');
-const logger = require('../../config/logger');
+import User from '../../models/User.js';
+import ROLES from '../../constants/roles.js';
+import logger from '../../config/logger.js';
 
 const usersToSeed = [
   {
@@ -91,8 +94,8 @@ const seedUsers = async () => {
 };
 
 // Run if direct execution
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   seedUsers();
 }
 
-module.exports = seedUsers;
+export default seedUsers;

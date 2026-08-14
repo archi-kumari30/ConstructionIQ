@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const DailySiteReportSchema = new mongoose.Schema(
   {
@@ -72,4 +72,4 @@ const DailySiteReportSchema = new mongoose.Schema(
 // Unique composite index: only one daily site report per project per day
 DailySiteReportSchema.index({ projectId: 1, date: 1 }, { unique: true });
 
-module.exports = mongoose.model('DailySiteReport', DailySiteReportSchema);
+export default mongoose.model('DailySiteReport', DailySiteReportSchema);

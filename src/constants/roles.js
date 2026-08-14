@@ -9,4 +9,4 @@ const ROLES = {
   SUPPLIER: 'supplier'
 };
 
-module.exports = ROLES;
+export default ROLES;

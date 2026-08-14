@@ -1,16 +1,26 @@
-const request = require('supertest');
-const app = require('../app');
-const userRepository = require('../repositories/userRepository');
-const mailService = require('../services/mailService');
-const auditLogService = require('../services/auditLogService');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt');
+import { jest } from '@jest/globals';
+
+const createMockModule = () => new Proxy({}, {
+  get(target, key) {
+    if (!(key in target)) target[key] = jest.fn();
+    return target[key];
+  }
+});
+
 
 // Mock dependencies
-jest.mock('../repositories/userRepository');
-jest.mock('../services/mailService');
-jest.mock('../services/auditLogService');
+jest.unstable_mockModule('../repositories/userRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/mailService.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/auditLogService.js', () => ({ default: createMockModule() }));
+
+const request = (await import('supertest')).default;
+const app = (await import('../app.js')).default;
+const userRepository = (await import('../repositories/userRepository.js')).default;
+const mailService = (await import('../services/mailService.js')).default;
+const auditLogService = (await import('../services/auditLogService.js')).default;
+const bcrypt = (await import('bcryptjs')).default;
+const jwt = (await import('jsonwebtoken')).default;
+const jwtConfig = (await import('../config/jwt.js')).default;
 
 describe('Auth Endpoints API tests', () => {
   const mockUser = {

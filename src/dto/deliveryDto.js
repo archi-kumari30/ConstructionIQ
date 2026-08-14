@@ -1,4 +1,4 @@
-const MaterialDto = require('./materialDto');
+import MaterialDto from './materialDto.js';
 
 /**
  * Delivery Tracking Data Transfer Object
@@ -32,4 +32,4 @@ class DeliveryDto {
   }
 }
 
-module.exports = DeliveryDto;
+export default DeliveryDto;

@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
@@ -68,7 +68,7 @@ const updateThresholdSchema = Joi.object({
   warehouseLocation: Joi.string().allow('').optional()
 });
 
-module.exports = {
+export {
   createMaterialSchema,
   updateMaterialSchema,
   createRequestSchema,
@@ -76,3 +76,4 @@ module.exports = {
   logTransactionSchema,
   updateThresholdSchema
 };
+export default { createMaterialSchema, updateMaterialSchema, createRequestSchema, approveRequestSchema, logTransactionSchema, updateThresholdSchema };

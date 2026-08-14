@@ -1,4 +1,4 @@
-const EquipmentDto = require('./equipmentDto');
+import EquipmentDto from './equipmentDto.js';
 
 /**
  * Equipment Booking Data Transfer Object
@@ -30,4 +30,4 @@ class EquipmentBookingDto {
   }
 }
 
-module.exports = EquipmentBookingDto;
+export default EquipmentBookingDto;

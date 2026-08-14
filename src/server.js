@@ -1,15 +1,12 @@
-const http = require('http');
-const dotenv = require('dotenv');
-const path = require('path');
-const socketIo = require('socket.io');
+import 'dotenv/config';
+import http from 'http';
+import { Server } from 'socket.io';
+import mongoose from 'mongoose';
 
-// Load environment variables before importing other local modules
-dotenv.config({ path: path.join(__dirname, '../.env') });
-
-const app = require('./app');
-const connectDB = require('./config/db');
-const logger = require('./config/logger');
-const socketConfig = require('./config/socket');
+import app from './app.js';
+import connectDB from './config/db.js';
+import logger from './config/logger.js';
+import socketConfig from './config/socket.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -19,10 +16,10 @@ connectDB();
 // Create HTTP server
 const server = http.createServer(app);
 
-const socketService = require('./socket/socketService');
+import socketService from './socket/socketService.js';
 
 // Initialize Socket.io connection
-const io = socketIo(server, socketConfig);
+const io = new Server(server, socketConfig);
 
 // Initialize socketService helper with io instance
 socketService.init(io);
@@ -46,12 +43,11 @@ io.on('connection', (socket) => {
 app.set('io', io);
 
 // Start Cron Jobs
-const { scheduleWeeklyAudit } = require('./jobs/cronJobs');
+import { scheduleWeeklyAudit } from './jobs/cronJobs.js';
 scheduleWeeklyAudit();
 
 // Initialize BullMQ Workers (imports to trigger background listener)
-require('./jobs/reportWorker');
-
+import './jobs/reportWorker.js';
 // Start listening
 server.listen(PORT, () => {
   logger.info(`ConstructionIQ Backend Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
@@ -66,14 +62,18 @@ process.on('unhandledRejection', (err, promise) => {
 });
 
 // Handle graceful shutdown on system signals
-const shutdown = () => {
+const shutdown = async () => {
   logger.info('SIGTERM/SIGINT signal received: closing HTTP server...');
-  server.close(() => {
+  server.close(async () => {
     logger.info('HTTP server closed. Disconnecting database...');
-    mongoose.connection.close(false, () => {
+    try {
+      await mongoose.connection.close(false);
       logger.info('Database connection closed. Graceful shutdown complete.');
       process.exit(0);
-    });
+    } catch (error) {
+      logger.error(`Error while closing database connection: ${error.message}`);
+      process.exit(1);
+    }
   });
 };
 

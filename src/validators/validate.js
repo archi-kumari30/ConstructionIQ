@@ -1,4 +1,4 @@
-const { ValidationError } = require('../utils/customErrors');
+import { ValidationError } from '../utils/customErrors.js';
 
 /**
  * Joi request validation middleware helper
@@ -27,4 +27,4 @@ const validate = (schema, source = 'body') => {
   };
 };
 
-module.exports = validate;
+export default validate;

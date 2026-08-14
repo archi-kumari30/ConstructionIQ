@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const materialController = require('../controllers/materialController');
-const { protect } = require('../middlewares/authMiddleware');
-const { authorize } = require('../middlewares/rbacMiddleware');
-const validate = require('../validators/validate');
-const {
+import materialController from '../controllers/materialController.js';
+import { protect } from '../middlewares/authMiddleware.js';
+import { authorize } from '../middlewares/rbacMiddleware.js';
+import validate from '../validators/validate.js';
+import {
   createMaterialSchema,
   updateMaterialSchema
-} = require('../validators/materialValidator');
-const ROLES = require('../constants/roles');
+} from '../validators/materialValidator.js';
+import ROLES from '../constants/roles.js';
 
 // Apply JWT verification
 router.use(protect);
@@ -36,4 +36,4 @@ router.delete(
   materialController.deleteMaterial
 );
 
-module.exports = router;
+export default router;

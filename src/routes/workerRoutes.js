@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const workerController = require('../controllers/workerController');
-const { protect } = require('../middlewares/authMiddleware');
-const { authorize } = require('../middlewares/rbacMiddleware');
-const validate = require('../validators/validate');
-const {
+import workerController from '../controllers/workerController.js';
+import { protect } from '../middlewares/authMiddleware.js';
+import { authorize } from '../middlewares/rbacMiddleware.js';
+import validate from '../validators/validate.js';
+import {
   createWorkerSchema,
   updateWorkerSchema
-} = require('../validators/workerValidator');
-const ROLES = require('../constants/roles');
+} from '../validators/workerValidator.js';
+import ROLES from '../constants/roles.js';
 
 // Apply JWT verification
 router.use(protect);
@@ -46,4 +46,4 @@ router.delete(
   workerController.deleteWorker
 );
 
-module.exports = router;
+export default router;

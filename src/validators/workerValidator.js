@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
@@ -40,8 +40,9 @@ const logAttendanceSchema = Joi.object({
   overtimeHours: Joi.number().min(0).optional()
 });
 
-module.exports = {
+export {
   createWorkerSchema,
   updateWorkerSchema,
   logAttendanceSchema
 };
+export default { createWorkerSchema, updateWorkerSchema, logAttendanceSchema };

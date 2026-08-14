@@ -21,4 +21,4 @@ class MaterialDto {
   }
 }
 
-module.exports = MaterialDto;
+export default MaterialDto;

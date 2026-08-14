@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   openaiApiKey: process.env.OPENAI_API_KEY || '',
   modelName: process.env.AI_MODEL_NAME || 'gpt-4o-mini',
   maxTokens: parseInt(process.env.AI_MAX_TOKENS || '1000', 10),

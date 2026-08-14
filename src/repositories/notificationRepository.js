@@ -1,4 +1,4 @@
-const Notification = require('../models/Notification');
+import Notification from '../models/Notification.js';
 
 class NotificationRepository {
   async create(notificationData) {
@@ -45,4 +45,4 @@ class NotificationRepository {
   }
 }
 
-module.exports = new NotificationRepository();
+export default new NotificationRepository();

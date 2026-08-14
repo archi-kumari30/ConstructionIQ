@@ -1,5 +1,5 @@
-const ERROR_CODES = require('../constants/errorCodes');
-const HTTP_CODES = require('../constants/httpCodes');
+import ERROR_CODES from '../constants/errorCodes.js';
+import HTTP_CODES from '../constants/httpCodes.js';
 
 class AppError extends Error {
   constructor(message, statusCode, errorCode, errors = null) {
@@ -48,7 +48,7 @@ class ValidationError extends AppError {
   }
 }
 
-module.exports = {
+export {
   AppError,
   BadRequestError,
   UnauthorizedError,
@@ -57,3 +57,4 @@ module.exports = {
   ConflictError,
   ValidationError
 };
+export default { AppError, BadRequestError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError, ValidationError };

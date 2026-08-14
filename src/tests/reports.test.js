@@ -1,28 +1,38 @@
-const request = require('supertest');
-const app = require('../app');
-const dailySiteReportRepository = require('../repositories/dailySiteReportRepository');
-const incidentRepository = require('../repositories/incidentRepository');
-const aiInsightRepository = require('../repositories/aiInsightRepository');
-const projectRepository = require('../repositories/projectRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const userRepository = require('../repositories/userRepository');
-const auditLogService = require('../services/auditLogService');
-const reportQueue = require('../jobs/reportQueue');
-const socketService = require('../socket/socketService');
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt');
-const mongoose = require('mongoose');
+import { jest } from '@jest/globals';
+
+const createMockModule = () => new Proxy({}, {
+  get(target, key) {
+    if (!(key in target)) target[key] = jest.fn();
+    return target[key];
+  }
+});
+
 
 // Mock dependencies
-jest.mock('../repositories/dailySiteReportRepository');
-jest.mock('../repositories/incidentRepository');
-jest.mock('../repositories/aiInsightRepository');
-jest.mock('../repositories/projectRepository');
-jest.mock('../repositories/projectTeamRepository');
-jest.mock('../repositories/userRepository');
-jest.mock('../services/auditLogService');
-jest.mock('../jobs/reportQueue');
-jest.mock('../socket/socketService');
+jest.unstable_mockModule('../repositories/dailySiteReportRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/incidentRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/aiInsightRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectTeamRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/userRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/auditLogService.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../jobs/reportQueue.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../socket/socketService.js', () => ({ default: createMockModule() }));
+
+const request = (await import('supertest')).default;
+const app = (await import('../app.js')).default;
+const dailySiteReportRepository = (await import('../repositories/dailySiteReportRepository.js')).default;
+const incidentRepository = (await import('../repositories/incidentRepository.js')).default;
+const aiInsightRepository = (await import('../repositories/aiInsightRepository.js')).default;
+const projectRepository = (await import('../repositories/projectRepository.js')).default;
+const projectTeamRepository = (await import('../repositories/projectTeamRepository.js')).default;
+const userRepository = (await import('../repositories/userRepository.js')).default;
+const auditLogService = (await import('../services/auditLogService.js')).default;
+const reportQueue = (await import('../jobs/reportQueue.js')).default;
+const socketService = (await import('../socket/socketService.js')).default;
+const jwt = (await import('jsonwebtoken')).default;
+const jwtConfig = (await import('../config/jwt.js')).default;
+const mongoose = (await import('mongoose')).default;
 
 describe('Operations Reporting, Incidents & AI Audits API tests', () => {
   // Mock User Profiles

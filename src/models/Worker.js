@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const WorkerSchema = new mongoose.Schema(
   {
@@ -39,4 +39,4 @@ WorkerSchema.index({ contractorId: 1 });
 WorkerSchema.index({ role: 1 });
 WorkerSchema.index({ isDeleted: 1 });
 
-module.exports = mongoose.model('Worker', WorkerSchema);
+export default mongoose.model('Worker', WorkerSchema);

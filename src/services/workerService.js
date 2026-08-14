@@ -1,10 +1,10 @@
-const workerRepository = require('../repositories/workerRepository');
-const attendanceRepository = require('../repositories/attendanceRepository');
-const auditLogService = require('./auditLogService');
-const userRepository = require('../repositories/userRepository');
-const { ConflictError, BadRequestError, ForbiddenError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
-const ROLES = require('../constants/roles');
+import workerRepository from '../repositories/workerRepository.js';
+import attendanceRepository from '../repositories/attendanceRepository.js';
+import auditLogService from './auditLogService.js';
+import userRepository from '../repositories/userRepository.js';
+import { ConflictError, BadRequestError, ForbiddenError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
+import ROLES from '../constants/roles.js';
 
 class WorkerService {
   // Helper to check contractor permissions on a worker
@@ -154,4 +154,4 @@ class WorkerService {
   }
 }
 
-module.exports = new WorkerService();
+export default new WorkerService();

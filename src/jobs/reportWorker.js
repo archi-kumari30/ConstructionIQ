@@ -1,12 +1,12 @@
+import { Worker } from 'bullmq';
+import redisConfig from '../config/redis.js';
+import dailySiteReportRepository from '../repositories/dailySiteReportRepository.js';
+import socketService from '../socket/socketService.js';
+import logger from '../config/logger.js';
+
 let reportWorker = null;
 
 if (process.env.NODE_ENV !== 'test') {
-  const { Worker } = require('bullmq');
-  const redisConfig = require('../config/redis');
-  const dailySiteReportRepository = require('../repositories/dailySiteReportRepository');
-  const socketService = require('../socket/socketService');
-  const logger = require('../config/logger');
-
   try {
     reportWorker = new Worker(
       'reportQueue',
@@ -53,4 +53,4 @@ if (process.env.NODE_ENV !== 'test') {
   };
 }
 
-module.exports = reportWorker;
+export default reportWorker;

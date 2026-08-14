@@ -1,4 +1,4 @@
-const MaterialDto = require('./materialDto');
+import MaterialDto from './materialDto.js';
 
 /**
  * Material Request Data Transfer Object
@@ -34,4 +34,4 @@ class MaterialRequestDto {
   }
 }
 
-module.exports = MaterialRequestDto;
+export default MaterialRequestDto;

@@ -1,14 +1,14 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const authController = require('../controllers/authController');
-const validate = require('../validators/validate');
-const {
+import authController from '../controllers/authController.js';
+import validate from '../validators/validate.js';
+import {
   registerSchema,
   loginSchema,
   refreshTokenSchema,
   forgotPasswordSchema,
   resetPasswordSchema
-} = require('../validators/authValidator');
+} from '../validators/authValidator.js';
 
 router.post('/register', validate(registerSchema), authController.register);
 router.post('/login', validate(loginSchema), authController.login);
@@ -17,4 +17,4 @@ router.get('/verify-email', authController.verifyEmail);
 router.post('/forgot-password', validate(forgotPasswordSchema), authController.forgotPassword);
 router.post('/reset-password/:token', validate(resetPasswordSchema), authController.resetPassword);
 
-module.exports = router;
+export default router;

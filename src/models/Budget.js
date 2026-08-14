@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const BudgetSchema = new mongoose.Schema(
   {
@@ -31,4 +31,4 @@ const BudgetSchema = new mongoose.Schema(
 // Unique composite index: ensures only one budget record exists per category per project
 BudgetSchema.index({ projectId: 1, category: 1 }, { unique: true });
 
-module.exports = mongoose.model('Budget', BudgetSchema);
+export default mongoose.model('Budget', BudgetSchema);

@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt');
-const userRepository = require('../repositories/userRepository');
-const { UnauthorizedError } = require('../utils/customErrors');
-const asyncWrapper = require('../utils/asyncWrapper');
+import jwt from 'jsonwebtoken';
+import jwtConfig from '../config/jwt.js';
+import userRepository from '../repositories/userRepository.js';
+import { UnauthorizedError } from '../utils/customErrors.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 const protect = asyncWrapper(async (req, res, next) => {
   let token;
@@ -41,6 +41,7 @@ const protect = asyncWrapper(async (req, res, next) => {
   }
 });
 
-module.exports = {
+export {
   protect
 };
+export default { protect };

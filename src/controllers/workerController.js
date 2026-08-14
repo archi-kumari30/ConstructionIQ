@@ -1,9 +1,9 @@
-const workerService = require('../services/workerService');
-const ApiResponse = require('../utils/apiResponse');
-const WorkerDto = require('../dto/workerDto');
-const AttendanceDto = require('../dto/attendanceDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import workerService from '../services/workerService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import WorkerDto from '../dto/workerDto.js';
+import AttendanceDto from '../dto/attendanceDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Workers CRUD ---
 const createWorker = asyncWrapper(async (req, res) => {
@@ -86,7 +86,7 @@ const getAttendanceReport = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   createWorker,
   updateWorker,
   deleteWorker,
@@ -95,3 +95,4 @@ module.exports = {
   logAttendance,
   getAttendanceReport
 };
+export default { createWorker, updateWorker, deleteWorker, getWorker, listWorkers, logAttendance, getAttendanceReport };

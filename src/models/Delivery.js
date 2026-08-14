@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import STATUS from '../constants/status.js';
 
 const DeliverySchema = new mongoose.Schema(
   {
@@ -49,4 +49,4 @@ const DeliverySchema = new mongoose.Schema(
 DeliverySchema.index({ projectId: 1, status: 1 });
 DeliverySchema.index({ supplierId: 1 });
 
-module.exports = mongoose.model('Delivery', DeliverySchema);
+export default mongoose.model('Delivery', DeliverySchema);

@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
-const materialRepository = require('../repositories/materialRepository');
-const materialInventoryRepository = require('../repositories/materialInventoryRepository');
-const materialRequestRepository = require('../repositories/materialRequestRepository');
-const materialTransactionRepository = require('../repositories/materialTransactionRepository');
-const notificationRepository = require('../repositories/notificationRepository');
-const socketService = require('../socket/socketService');
-const auditLogService = require('./auditLogService');
-const { ConflictError, BadRequestError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
-const STATUS = require('../constants/status');
+import mongoose from 'mongoose';
+import materialRepository from '../repositories/materialRepository.js';
+import materialInventoryRepository from '../repositories/materialInventoryRepository.js';
+import materialRequestRepository from '../repositories/materialRequestRepository.js';
+import materialTransactionRepository from '../repositories/materialTransactionRepository.js';
+import notificationRepository from '../repositories/notificationRepository.js';
+import socketService from '../socket/socketService.js';
+import auditLogService from './auditLogService.js';
+import { ConflictError, BadRequestError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
+import STATUS from '../constants/status.js';
 
 class MaterialService {
   // Helper to run operations in transaction (with graceful fallback for standalone developer MongoDB)
@@ -329,4 +329,4 @@ class MaterialService {
   }
 }
 
-module.exports = new MaterialService();
+export default new MaterialService();

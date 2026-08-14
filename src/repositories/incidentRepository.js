@@ -1,4 +1,4 @@
-const Incident = require('../models/Incident');
+import Incident from '../models/Incident.js';
 
 class IncidentRepository {
   async findById(id) {
@@ -46,4 +46,4 @@ class IncidentRepository {
   }
 }
 
-module.exports = new IncidentRepository();
+export default new IncidentRepository();

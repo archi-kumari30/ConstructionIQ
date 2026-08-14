@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
-const deliveryRepository = require('../repositories/deliveryRepository');
-const budgetRepository = require('../repositories/budgetRepository');
-const expenseRepository = require('../repositories/expenseRepository');
-const materialRepository = require('../repositories/materialRepository');
-const materialInventoryRepository = require('../repositories/materialInventoryRepository');
-const materialTransactionRepository = require('../repositories/materialTransactionRepository');
-const userRepository = require('../repositories/userRepository');
-const auditLogService = require('./auditLogService');
-const { BadRequestError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
-const STATUS = require('../constants/status');
-const ROLES = require('../constants/roles');
+import mongoose from 'mongoose';
+import deliveryRepository from '../repositories/deliveryRepository.js';
+import budgetRepository from '../repositories/budgetRepository.js';
+import expenseRepository from '../repositories/expenseRepository.js';
+import materialRepository from '../repositories/materialRepository.js';
+import materialInventoryRepository from '../repositories/materialInventoryRepository.js';
+import materialTransactionRepository from '../repositories/materialTransactionRepository.js';
+import userRepository from '../repositories/userRepository.js';
+import auditLogService from './auditLogService.js';
+import { BadRequestError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
+import STATUS from '../constants/status.js';
+import ROLES from '../constants/roles.js';
 
 class FinanceService {
   // Helper to run transaction operations (with serial fallback for standalone developer MongoDB)
@@ -234,6 +234,6 @@ class FinanceService {
 }
 
 // Sub-classing model import to bypass schema mapping lookup errors during transaction execution
-const Delivery = require('../models/Delivery');
+import Delivery from '../models/Delivery.js';
 
-module.exports = new FinanceService();
+export default new FinanceService();

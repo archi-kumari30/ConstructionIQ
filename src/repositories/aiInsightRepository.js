@@ -1,4 +1,4 @@
-const AiInsight = require('../models/AiInsight');
+import AiInsight from '../models/AiInsight.js';
 
 class AiInsightRepository {
   async create(insightData) {
@@ -30,4 +30,4 @@ class AiInsightRepository {
   }
 }
 
-module.exports = new AiInsightRepository();
+export default new AiInsightRepository();

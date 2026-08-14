@@ -25,4 +25,4 @@ class WorkerDto {
   }
 }
 
-module.exports = WorkerDto;
+export default WorkerDto;

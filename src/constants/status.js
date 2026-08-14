@@ -75,4 +75,4 @@ const STATUS = {
   }
 };
 
-module.exports = STATUS;
+export default STATUS;

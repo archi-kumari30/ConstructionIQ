@@ -1,10 +1,10 @@
-const equipmentRepository = require('../repositories/equipmentRepository');
-const equipmentBookingRepository = require('../repositories/equipmentBookingRepository');
-const equipmentUsageLogRepository = require('../repositories/equipmentUsageLogRepository');
-const auditLogService = require('./auditLogService');
-const { ConflictError, BadRequestError, NotFoundError } = require('../utils/customErrors');
-const logger = require('../config/logger');
-const STATUS = require('../constants/status');
+import equipmentRepository from '../repositories/equipmentRepository.js';
+import equipmentBookingRepository from '../repositories/equipmentBookingRepository.js';
+import equipmentUsageLogRepository from '../repositories/equipmentUsageLogRepository.js';
+import auditLogService from './auditLogService.js';
+import { ConflictError, BadRequestError, NotFoundError } from '../utils/customErrors.js';
+import logger from '../config/logger.js';
+import STATUS from '../constants/status.js';
 
 class EquipmentService {
   // --- Global Fleet CRUD ---
@@ -196,4 +196,4 @@ class EquipmentService {
   }
 }
 
-module.exports = new EquipmentService();
+export default new EquipmentService();

@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 
@@ -50,8 +50,9 @@ const createDailyReportSchema = Joi.object({
   ).optional()
 });
 
-module.exports = {
+export {
   createIncidentSchema,
   updateIncidentSchema,
   createDailyReportSchema
 };
+export default { createIncidentSchema, updateIncidentSchema, createDailyReportSchema };

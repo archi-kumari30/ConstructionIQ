@@ -1,5 +1,5 @@
-const auditLogRepository = require('../repositories/auditLogRepository');
-const logger = require('../config/logger');
+import auditLogRepository from '../repositories/auditLogRepository.js';
+import logger from '../config/logger.js';
 
 class AuditLogService {
   async logAction({ userId, action, entity, entityId = null, details = {}, ipAddress = null }) {
@@ -26,4 +26,4 @@ class AuditLogService {
   }
 }
 
-module.exports = new AuditLogService();
+export default new AuditLogService();

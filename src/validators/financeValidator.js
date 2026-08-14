@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const STATUS = require('../constants/status');
+import Joi from 'joi';
+import STATUS from '../constants/status.js';
 
 const objectIdPattern = /^[0-9a-fA-F]{24}$/;
 const budgetCategories = ['materials', 'labor', 'equipment', 'logistics', 'subcontractors', 'miscellaneous'];
@@ -58,9 +58,10 @@ const createExpenseSchema = Joi.object({
   receiptUrl: Joi.string().allow('').optional()
 });
 
-module.exports = {
+export {
   createDeliverySchema,
   updateDeliveryStatusSchema,
   createBudgetSchema,
   createExpenseSchema
 };
+export default { createDeliverySchema, updateDeliveryStatusSchema, createBudgetSchema, createExpenseSchema };

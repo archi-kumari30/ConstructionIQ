@@ -1,4 +1,4 @@
-const Delivery = require('../models/Delivery');
+import Delivery from '../models/Delivery.js';
 
 class DeliveryRepository {
   async findById(id) {
@@ -74,4 +74,4 @@ class DeliveryRepository {
   }
 }
 
-module.exports = new DeliveryRepository();
+export default new DeliveryRepository();

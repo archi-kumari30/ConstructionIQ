@@ -29,4 +29,4 @@ class IncidentDto {
   }
 }
 
-module.exports = IncidentDto;
+export default IncidentDto;

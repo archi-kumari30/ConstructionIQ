@@ -1,30 +1,41 @@
-const request = require('supertest');
-const app = require('../app');
-const deliveryRepository = require('../repositories/deliveryRepository');
-const budgetRepository = require('../repositories/budgetRepository');
-const expenseRepository = require('../repositories/expenseRepository');
-const materialRepository = require('../repositories/materialRepository');
-const materialInventoryRepository = require('../repositories/materialInventoryRepository');
-const materialTransactionRepository = require('../repositories/materialTransactionRepository');
-const projectRepository = require('../repositories/projectRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const userRepository = require('../repositories/userRepository');
-const auditLogService = require('../services/auditLogService');
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt');
-const mongoose = require('mongoose');
+import { jest } from '@jest/globals';
+
+const createMockModule = () => new Proxy({}, {
+  get(target, key) {
+    if (!(key in target)) target[key] = jest.fn();
+    return target[key];
+  }
+});
+
 
 // Mock dependencies
-jest.mock('../repositories/deliveryRepository');
-jest.mock('../repositories/budgetRepository');
-jest.mock('../repositories/expenseRepository');
-jest.mock('../repositories/materialRepository');
-jest.mock('../repositories/materialInventoryRepository');
-jest.mock('../repositories/materialTransactionRepository');
-jest.mock('../repositories/projectRepository');
-jest.mock('../repositories/projectTeamRepository');
-jest.mock('../repositories/userRepository');
-jest.mock('../services/auditLogService');
+jest.unstable_mockModule('../repositories/deliveryRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/budgetRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/expenseRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialInventoryRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialTransactionRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectTeamRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/userRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/auditLogService.js', () => ({ default: createMockModule() }));
+
+const request = (await import('supertest')).default;
+const app = (await import('../app.js')).default;
+const deliveryRepository = (await import('../repositories/deliveryRepository.js')).default;
+const budgetRepository = (await import('../repositories/budgetRepository.js')).default;
+const expenseRepository = (await import('../repositories/expenseRepository.js')).default;
+const materialRepository = (await import('../repositories/materialRepository.js')).default;
+const materialInventoryRepository = (await import('../repositories/materialInventoryRepository.js')).default;
+const materialTransactionRepository = (await import('../repositories/materialTransactionRepository.js')).default;
+const projectRepository = (await import('../repositories/projectRepository.js')).default;
+const projectTeamRepository = (await import('../repositories/projectTeamRepository.js')).default;
+const userRepository = (await import('../repositories/userRepository.js')).default;
+const auditLogService = (await import('../services/auditLogService.js')).default;
+const jwt = (await import('jsonwebtoken')).default;
+const jwtConfig = (await import('../config/jwt.js')).default;
+const mongoose = (await import('mongoose')).default;
+const Delivery = (await import('../models/Delivery.js')).default;
 
 describe('Logistics, Budgeting & Expenses Endpoints API tests', () => {
   // Mock User Profiles
@@ -242,4 +253,3 @@ describe('Logistics, Budgeting & Expenses Endpoints API tests', () => {
 });
 
 // Import model helper at bottom to prevent mock conflicts
-const Delivery = require('../models/Delivery');

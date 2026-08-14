@@ -1,30 +1,40 @@
-const request = require('supertest');
-const app = require('../app');
-const materialRepository = require('../repositories/materialRepository');
-const materialInventoryRepository = require('../repositories/materialInventoryRepository');
-const materialRequestRepository = require('../repositories/materialRequestRepository');
-const materialTransactionRepository = require('../repositories/materialTransactionRepository');
-const projectTeamRepository = require('../repositories/projectTeamRepository');
-const notificationRepository = require('../repositories/notificationRepository');
-const socketService = require('../socket/socketService');
-const auditLogService = require('../services/auditLogService');
-const jwt = require('jsonwebtoken');
-const userRepository = require('../repositories/userRepository');
-const projectRepository = require('../repositories/projectRepository');
-const jwtConfig = require('../config/jwt');
-const mongoose = require('mongoose');
+import { jest } from '@jest/globals';
+
+const createMockModule = () => new Proxy({}, {
+  get(target, key) {
+    if (!(key in target)) target[key] = jest.fn();
+    return target[key];
+  }
+});
+
 
 // Mock dependencies
-jest.mock('../repositories/materialRepository');
-jest.mock('../repositories/materialInventoryRepository');
-jest.mock('../repositories/materialRequestRepository');
-jest.mock('../repositories/materialTransactionRepository');
-jest.mock('../repositories/projectTeamRepository');
-jest.mock('../repositories/notificationRepository');
-jest.mock('../socket/socketService');
-jest.mock('../services/auditLogService');
-jest.mock('../repositories/userRepository');
-jest.mock('../repositories/projectRepository');
+jest.unstable_mockModule('../repositories/materialRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialInventoryRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialRequestRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/materialTransactionRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectTeamRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/notificationRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../socket/socketService.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../services/auditLogService.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/userRepository.js', () => ({ default: createMockModule() }));
+jest.unstable_mockModule('../repositories/projectRepository.js', () => ({ default: createMockModule() }));
+
+const request = (await import('supertest')).default;
+const app = (await import('../app.js')).default;
+const materialRepository = (await import('../repositories/materialRepository.js')).default;
+const materialInventoryRepository = (await import('../repositories/materialInventoryRepository.js')).default;
+const materialRequestRepository = (await import('../repositories/materialRequestRepository.js')).default;
+const materialTransactionRepository = (await import('../repositories/materialTransactionRepository.js')).default;
+const projectTeamRepository = (await import('../repositories/projectTeamRepository.js')).default;
+const notificationRepository = (await import('../repositories/notificationRepository.js')).default;
+const socketService = (await import('../socket/socketService.js')).default;
+const auditLogService = (await import('../services/auditLogService.js')).default;
+const jwt = (await import('jsonwebtoken')).default;
+const userRepository = (await import('../repositories/userRepository.js')).default;
+const projectRepository = (await import('../repositories/projectRepository.js')).default;
+const jwtConfig = (await import('../config/jwt.js')).default;
+const mongoose = (await import('mongoose')).default;
 
 describe('Materials Catalog & Ledger Endpoints API tests', () => {
   // Mock Users

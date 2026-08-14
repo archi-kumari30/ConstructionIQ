@@ -1,11 +1,11 @@
-const materialService = require('../services/materialService');
-const ApiResponse = require('../utils/apiResponse');
-const MaterialDto = require('../dto/materialDto');
-const MaterialInventoryDto = require('../dto/materialInventoryDto');
-const MaterialRequestDto = require('../dto/materialRequestDto');
-const MaterialTransactionDto = require('../dto/materialTransactionDto');
-const HTTP_CODES = require('../constants/httpCodes');
-const asyncWrapper = require('../utils/asyncWrapper');
+import materialService from '../services/materialService.js';
+import ApiResponse from '../utils/apiResponse.js';
+import MaterialDto from '../dto/materialDto.js';
+import MaterialInventoryDto from '../dto/materialInventoryDto.js';
+import MaterialRequestDto from '../dto/materialRequestDto.js';
+import MaterialTransactionDto from '../dto/materialTransactionDto.js';
+import HTTP_CODES from '../constants/httpCodes.js';
+import asyncWrapper from '../utils/asyncWrapper.js';
 
 // --- Global Catalog ---
 const createMaterial = asyncWrapper(async (req, res) => {
@@ -167,7 +167,7 @@ const listRequests = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
-module.exports = {
+export {
   createMaterial,
   updateMaterial,
   deleteMaterial,
@@ -181,3 +181,4 @@ module.exports = {
   fulfillRequest,
   listRequests
 };
+export default { createMaterial, updateMaterial, deleteMaterial, listMaterials, getInventory, updateThreshold, logTransaction, listTransactions, createRequest, approveRequest, fulfillRequest, listRequests };

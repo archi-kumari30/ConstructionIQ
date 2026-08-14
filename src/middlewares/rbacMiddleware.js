@@ -1,4 +1,4 @@
-const { ForbiddenError } = require('../utils/customErrors');
+import { ForbiddenError } from '../utils/customErrors.js';
 
 /**
  * Authorize access to specific roles
@@ -22,6 +22,7 @@ const authorize = (...allowedRoles) => {
   };
 };
 
-module.exports = {
+export {
   authorize
 };
+export default { authorize };

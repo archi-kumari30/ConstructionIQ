@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const AiInsightSchema = new mongoose.Schema(
   {
@@ -40,4 +40,4 @@ const AiInsightSchema = new mongoose.Schema(
 AiInsightSchema.index({ projectId: 1, type: 1 });
 AiInsightSchema.index({ date: -1 });
 
-module.exports = mongoose.model('AiInsight', AiInsightSchema);
+export default mongoose.model('AiInsight', AiInsightSchema);

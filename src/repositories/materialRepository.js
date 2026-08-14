@@ -1,4 +1,4 @@
-const Material = require('../models/Material');
+import Material from '../models/Material.js';
 
 class MaterialRepository {
   async findById(id) {
@@ -66,4 +66,4 @@ class MaterialRepository {
   }
 }
 
-module.exports = new MaterialRepository();
+export default new MaterialRepository();

@@ -1,31 +1,10 @@
-let mockReadyState = 1;
-
-// Mock mongoose before app is imported
-jest.mock('mongoose', () => {
-  const actualMongoose = jest.requireActual('mongoose');
-  
-  // Create a proxy over the native connection to dynamically override readyState
-  const connectionProxy = new Proxy(actualMongoose.connection, {
-    get(target, prop) {
-      if (prop === 'readyState') {
-        return mockReadyState;
-      }
-      return target[prop];
-    }
-  });
-
-  return {
-    ...actualMongoose,
-    connection: connectionProxy
-  };
-});
-
-const request = require('supertest');
-const app = require('../app');
+const request = (await import('supertest')).default;
+const mongoose = (await import('mongoose')).default;
+const app = (await import('../app.js')).default;
 
 describe('GET /api/v1/health', () => {
   it('should return UP status when database is connected (readyState = 1)', async () => {
-    mockReadyState = 1;
+    mongoose.connection._readyState = 1;
 
     const res = await request(app).get('/api/v1/health');
     
@@ -36,7 +15,7 @@ describe('GET /api/v1/health', () => {
   });
 
   it('should return DOWN status when database is disconnected (readyState = 0)', async () => {
-    mockReadyState = 0;
+    mongoose.connection._readyState = 0;
 
     const res = await request(app).get('/api/v1/health');
     

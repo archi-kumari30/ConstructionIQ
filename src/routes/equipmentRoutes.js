@@ -1,15 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const equipmentController = require('../controllers/equipmentController');
-const { protect } = require('../middlewares/authMiddleware');
-const { authorize } = require('../middlewares/rbacMiddleware');
-const validate = require('../validators/validate');
-const {
+import equipmentController from '../controllers/equipmentController.js';
+import { protect } from '../middlewares/authMiddleware.js';
+import { authorize } from '../middlewares/rbacMiddleware.js';
+import validate from '../validators/validate.js';
+import {
   createEquipmentSchema,
   updateEquipmentSchema,
   updateBookingStatusSchema
-} = require('../validators/equipmentValidator');
-const ROLES = require('../constants/roles');
+} from '../validators/equipmentValidator.js';
+import ROLES from '../constants/roles.js';
 
 // Apply JWT verification
 router.use(protect);
@@ -46,4 +46,4 @@ router.put(
   equipmentController.updateBookingStatus
 );
 
-module.exports = router;
+export default router;

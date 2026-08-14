@@ -1,4 +1,4 @@
-const logger = require('../config/logger');
+import logger from '../config/logger.js';
 
 let io = null;
 
@@ -21,8 +21,9 @@ const emitToProject = (projectId, event, data) => {
   }
 };
 
-module.exports = {
+export {
   init,
   getIo,
   emitToProject
 };
+export default { init, getIo, emitToProject };

@@ -22,4 +22,4 @@ class ProjectMilestoneDto {
   }
 }
 
-module.exports = ProjectMilestoneDto;
+export default ProjectMilestoneDto;

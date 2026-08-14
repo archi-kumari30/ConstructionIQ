@@ -1,4 +1,4 @@
-const Attendance = require('../models/Attendance');
+import Attendance from '../models/Attendance.js';
 
 class AttendanceRepository {
   async create(attendanceData) {
@@ -39,4 +39,4 @@ class AttendanceRepository {
   }
 }
 
-module.exports = new AttendanceRepository();
+export default new AttendanceRepository();
