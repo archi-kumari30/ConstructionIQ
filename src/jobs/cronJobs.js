@@ -24,7 +24,7 @@ const scheduleWeeklyAudit = () => {
 
         // 2. Count active incidents
         const incidentsResult = await incidentRepository.findByProject(project._id, {
-          filter: { status: 'reported' },
+          filter: { status: 'open' },
           limit: 1
         });
         const pendingIncidentCount = incidentsResult.total;
