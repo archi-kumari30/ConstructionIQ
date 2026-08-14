@@ -152,6 +152,14 @@ class MaterialService {
         ? quantity
         : -quantity;
 
+      if (stockAdjustment < 0) {
+        const inventory = await materialInventoryRepository.findByProjectAndMaterialRaw(projectId, materialId, session);
+        const available = inventory ? inventory.quantityAvailable : 0;
+        if (available < quantity) {
+          throw new BadRequestError(`Insufficient stock in project inventory to issue material. Available: ${available}, Requested: ${quantity}`);
+        }
+      }
+
       const inventory = await materialInventoryRepository.updateStock(projectId, materialId, stockAdjustment, session);
 
       // Check low stock levels

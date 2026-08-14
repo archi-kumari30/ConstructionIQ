@@ -73,7 +73,7 @@ const createBooking = asyncWrapper(async (req, res) => {
 const updateBookingStatus = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
-  const booking = await equipmentService.updateBookingStatus(id, status, req.user._id);
+  const booking = await equipmentService.updateBookingStatus(id, status, req.user);
   return ApiResponse.success(
     res,
     `Booking status updated to ${status}`,

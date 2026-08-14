@@ -15,9 +15,9 @@ const registerSchema = Joi.object({
     'string.min': 'Password must be at least 6 characters long'
   }),
   role: Joi.string()
-    .valid(...Object.values(ROLES))
+    .valid(...Object.values(ROLES).filter(r => r !== ROLES.ADMIN))
     .messages({
-      'any.only': `Role must be one of: ${Object.values(ROLES).join(', ')}`
+      'any.only': `Role must be one of: ${Object.values(ROLES).filter(r => r !== ROLES.ADMIN).join(', ')}`
     }),
   phone: Joi.string()
     .pattern(/^[+]?[0-9]{8,15}$/)

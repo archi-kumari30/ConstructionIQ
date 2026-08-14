@@ -2,6 +2,7 @@ import equipmentRepository from '../repositories/equipmentRepository.js';
 import equipmentBookingRepository from '../repositories/equipmentBookingRepository.js';
 import equipmentUsageLogRepository from '../repositories/equipmentUsageLogRepository.js';
 import auditLogService from './auditLogService.js';
+import projectService from './projectService.js';
 import { ConflictError, BadRequestError, NotFoundError } from '../utils/customErrors.js';
 import logger from '../config/logger.js';
 import STATUS from '../constants/status.js';
@@ -106,11 +107,14 @@ class EquipmentService {
     return booking;
   }
 
-  async updateBookingStatus(bookingId, status, userId) {
+  async updateBookingStatus(bookingId, status, user) {
     const booking = await equipmentBookingRepository.findByIdRaw(bookingId);
     if (!booking) {
       throw new NotFoundError('Equipment booking not found');
     }
+
+    // Verify project access boundaries
+    await projectService.validateProjectAccess(booking.projectId, user);
 
     const oldStatus = booking.status;
     if (oldStatus === status) {
@@ -147,7 +151,7 @@ class EquipmentService {
     }
 
     await auditLogService.logAction({
-      userId,
+      userId: user._id,
       action: `EQUIPMENT_BOOKING_${status.toUpperCase()}`,
       entity: 'EquipmentBooking',
       entityId: booking._id,

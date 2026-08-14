@@ -61,7 +61,7 @@ describe('Logistics, Budgeting & Expenses Endpoints API tests', () => {
     quantityOrdered: 100,
     quantityReceived: 0,
     supplierId: supplierUser._id,
-    status: 'ordered',
+    status: 'scheduled',
     save: jest.fn().mockImplementation(function() { return this; })
   };
 
@@ -116,7 +116,7 @@ describe('Logistics, Budgeting & Expenses Endpoints API tests', () => {
 
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
-      expect(res.body.data.status).toBe('ordered');
+      expect(res.body.data.status).toBe('scheduled');
     });
 
     it('should trigger stock increments when delivery status changes to delivered', async () => {

@@ -207,6 +207,30 @@ describe('Equipment Fleet & Bookings Endpoints API tests', () => {
       expect(inUseEquipment.save).toHaveBeenCalled();
       expect(inUseEquipment.status).toBe('available');
     });
+
+    it('should deny status update if user has no access to the booking project', async () => {
+      const alienUser = { _id: '60d0fe4f5311236168a109dd', name: 'Alien PM', email: 'alien@test.com', role: 'project_manager', isActive: true };
+      const alienToken = jwt.sign({ id: alienUser._id, role: alienUser.role, email: alienUser.email }, jwtConfig.accessSecret);
+
+      userRepository.findById.mockImplementation(async (id) => {
+        if (id === adminUser._id) return adminUser;
+        if (id === pmUser._id) return pmUser;
+        if (id === alienUser._id) return alienUser;
+        return null;
+      });
+
+      equipmentBookingRepository.findByIdRaw.mockResolvedValue(mockBooking);
+      projectRepository.findById.mockResolvedValue({ _id: projectId, name: 'Metropolis Tower', managerId: pmUser._id });
+      projectTeamRepository.isUserOnProjectTeam.mockResolvedValue(false);
+
+      const res = await request(app)
+        .put(`/api/v1/equipment/bookings/${mockBooking._id}/status`)
+        .set('Authorization', `Bearer ${alienToken}`)
+        .send({ status: 'in_progress' });
+
+      expect(res.status).toBe(403);
+      expect(res.body.success).toBe(false);
+    });
   });
 
   describe('POST /api/v1/projects/:projectId/telemetry (Fleet Telemetry)', () => {

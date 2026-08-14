@@ -88,6 +88,18 @@ describe('Auth Endpoints API tests', () => {
       expect(res.body.success).toBe(false);
       expect(res.body.errors.length).toBeGreaterThan(0);
     });
+
+    it('should fail registration if role is admin', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/register')
+        .send({
+          ...registerPayload,
+          role: 'admin'
+        });
+
+      expect(res.status).toBe(422);
+      expect(res.body.success).toBe(false);
+    });
   });
 
   describe('POST /api/v1/auth/login', () => {

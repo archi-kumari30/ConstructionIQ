@@ -55,7 +55,7 @@ describe('Operations Reporting, Incidents & AI Audits API tests', () => {
     title: 'Excavator Hydraulic Leak',
     description: 'Minor hydraulic fluid leak detected on site excavator.',
     severity: 'medium',
-    status: 'reported',
+    status: 'open',
     images: [],
     save: jest.fn().mockImplementation(function() { return this; })
   };
@@ -260,6 +260,71 @@ describe('Operations Reporting, Incidents & AI Audits API tests', () => {
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.data.insights[0].type).toBe(mockInsight.type);
+    });
+  });
+
+  describe('IDOR / Project Access Boundaries for Incidents & Reports', () => {
+    const alienUser = { _id: '60d0fe4f5311236168a109dd', name: 'Alien PM', email: 'alien@test.com', role: 'project_manager', isActive: true };
+    const alienToken = jwt.sign({ id: alienUser._id, role: alienUser.role, email: alienUser.email }, jwtConfig.accessSecret);
+
+    beforeEach(() => {
+      userRepository.findById.mockImplementation(async (id) => {
+        if (id === adminUser._id) return adminUser;
+        if (id === pmUser._id) return pmUser;
+        if (id === engineerUser._id) return engineerUser;
+        if (id === alienUser._id) return alienUser;
+        return null;
+      });
+    });
+
+    it('should block GET /reports/:id if user is not on project team', async () => {
+      dailySiteReportRepository.findById.mockResolvedValue(mockReport);
+      projectRepository.findById.mockResolvedValue({ _id: projectId, name: 'Metropolis Tower', managerId: pmUser._id });
+      projectTeamRepository.isUserOnProjectTeam.mockResolvedValue(false);
+
+      const res = await request(app)
+        .get(`/api/v1/projects/reports/${mockReport._id}`)
+        .set('Authorization', `Bearer ${alienToken}`);
+
+      expect(res.status).toBe(403);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should permit GET /reports/:id if user is admin', async () => {
+      dailySiteReportRepository.findById.mockResolvedValue(mockReport);
+
+      const res = await request(app)
+        .get(`/api/v1/projects/reports/${mockReport._id}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+    });
+
+    it('should block GET /incidents/:id if user is not on project team', async () => {
+      incidentRepository.findById.mockResolvedValue(mockIncident);
+      projectRepository.findById.mockResolvedValue({ _id: projectId, name: 'Metropolis Tower', managerId: pmUser._id });
+      projectTeamRepository.isUserOnProjectTeam.mockResolvedValue(false);
+
+      const res = await request(app)
+        .get(`/api/v1/projects/incidents/${mockIncident._id}`)
+        .set('Authorization', `Bearer ${alienToken}`);
+
+      expect(res.status).toBe(403);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should block PUT /incidents/:id if user is not on project team', async () => {
+      incidentRepository.findByIdRaw.mockResolvedValue(mockIncident);
+      projectRepository.findById.mockResolvedValue({ _id: projectId, name: 'Metropolis Tower', managerId: pmUser._id });
+      projectTeamRepository.isUserOnProjectTeam.mockResolvedValue(false);
+
+      const res = await request(app)
+        .put(`/api/v1/projects/incidents/${mockIncident._id}`)
+        .set('Authorization', `Bearer ${alienToken}`)
+        .send({ title: 'New title' });
+
+      expect(res.status).toBe(403);
     });
   });
 });

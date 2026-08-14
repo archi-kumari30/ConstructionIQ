@@ -37,10 +37,20 @@ class ProjectRepository {
     const queryFilter = { ...filter, isDeleted: false };
 
     if (search) {
-      queryFilter.$or = [
+      const searchOrCondition = [
         { name: { $regex: search, $options: 'i' } },
         { location: { $regex: search, $options: 'i' } }
       ];
+
+      if (filter.$or) {
+        queryFilter.$and = [
+          { $or: filter.$or },
+          { $or: searchOrCondition }
+        ];
+        delete queryFilter.$or;
+      } else {
+        queryFilter.$or = searchOrCondition;
+      }
     }
 
     const skip = (page - 1) * limit;

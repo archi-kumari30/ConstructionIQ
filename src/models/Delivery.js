@@ -35,7 +35,7 @@ const DeliverySchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(STATUS.DELIVERY),
-      default: STATUS.DELIVERY.ORDERED
+      default: STATUS.DELIVERY.SCHEDULED
     },
     deliveryDate: {
       type: Date

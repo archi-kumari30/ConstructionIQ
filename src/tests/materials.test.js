@@ -249,4 +249,52 @@ describe('Materials Catalog & Ledger Endpoints API tests', () => {
       expect(notificationRepository.create).toHaveBeenCalled();
     });
   });
+
+  describe('POST /api/v1/projects/:projectId/transactions (Manual Ledger & Overdraft Check)', () => {
+    it('should reject manual ISSUED transactions if available stock is insufficient', async () => {
+      materialRepository.findById.mockResolvedValue(mockMaterial);
+      materialInventoryRepository.findByProjectAndMaterialRaw.mockResolvedValue({
+        ...mockInventory,
+        quantityAvailable: 10
+      });
+
+      const res = await request(app)
+        .post(`/api/v1/projects/${projectId}/transactions`)
+        .set('Authorization', `Bearer ${pmToken}`)
+        .send({
+          materialId: mockMaterial._id,
+          type: 'issued',
+          quantity: 20
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+      expect(res.body.message).toContain('Insufficient stock');
+    });
+
+    it('should allow manual ISSUED transactions if available stock is sufficient', async () => {
+      materialRepository.findById.mockResolvedValue(mockMaterial);
+      materialInventoryRepository.findByProjectAndMaterialRaw.mockResolvedValue({
+        ...mockInventory,
+        quantityAvailable: 100
+      });
+      materialTransactionRepository.create.mockResolvedValue({});
+      materialInventoryRepository.updateStock.mockResolvedValue({
+        ...mockInventory,
+        quantityAvailable: 80
+      });
+
+      const res = await request(app)
+        .post(`/api/v1/projects/${projectId}/transactions`)
+        .set('Authorization', `Bearer ${pmToken}`)
+        .send({
+          materialId: mockMaterial._id,
+          type: 'issued',
+          quantity: 20
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body.success).toBe(true);
+    });
+  });
 });

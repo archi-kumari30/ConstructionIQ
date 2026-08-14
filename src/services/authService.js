@@ -13,6 +13,7 @@ import {
 } from '../utils/customErrors.js';
 import logger from '../config/logger.js';
 import User from '../models/User.js';
+import ROLES from '../constants/roles.js';
 
 class AuthService {
   // Helper to generate access token
@@ -35,6 +36,10 @@ class AuthService {
 
   async register(userData) {
     const { name, email, password, role, phone } = userData;
+
+    if (role === ROLES.ADMIN) {
+      throw new BadRequestError('Admin registration is not allowed');
+    }
 
     // Check if email already exists
     const existingUser = await userRepository.findByEmailLean(email);

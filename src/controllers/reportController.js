@@ -20,7 +20,7 @@ const compileDailyReport = asyncWrapper(async (req, res) => {
 
 const getDailyReport = asyncWrapper(async (req, res) => {
   const { id } = req.params;
-  const report = await reportService.getDailyReportById(id);
+  const report = await reportService.getDailyReportById(id, req.user);
   return ApiResponse.success(res, 'Daily site report retrieved successfully', DailySiteReportDto.toResponse(report), HTTP_CODES.OK);
 });
 
@@ -58,7 +58,7 @@ const logIncident = asyncWrapper(async (req, res) => {
 const updateIncident = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const uploadedImages = req.uploadedImages || [];
-  const incident = await reportService.updateIncident(id, req.body, req.user._id, uploadedImages);
+  const incident = await reportService.updateIncident(id, req.body, req.user, uploadedImages);
   return ApiResponse.success(
     res,
     'Incident details updated successfully',
@@ -69,7 +69,7 @@ const updateIncident = asyncWrapper(async (req, res) => {
 
 const getIncident = asyncWrapper(async (req, res) => {
   const { id } = req.params;
-  const incident = await reportService.getIncidentById(id);
+  const incident = await reportService.getIncidentById(id, req.user);
   return ApiResponse.success(res, 'Incident logs retrieved successfully', IncidentDto.toResponse(incident), HTTP_CODES.OK);
 });
 

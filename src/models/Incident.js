@@ -32,7 +32,7 @@ const IncidentSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(STATUS.INCIDENT),
-      default: STATUS.INCIDENT.REPORTED
+      default: STATUS.INCIDENT.OPEN
     },
     images: {
       type: [String],

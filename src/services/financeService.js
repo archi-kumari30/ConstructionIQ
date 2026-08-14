@@ -53,7 +53,7 @@ class FinanceService {
       ...deliveryData,
       projectId,
       supplierId,
-      status: STATUS.DELIVERY.ORDERED
+      status: STATUS.DELIVERY.SCHEDULED
     });
 
     await auditLogService.logAction({

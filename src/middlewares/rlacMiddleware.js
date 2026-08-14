@@ -1,7 +1,6 @@
+import projectService from '../services/projectService.js';
 import projectRepository from '../repositories/projectRepository.js';
-import projectTeamRepository from '../repositories/projectTeamRepository.js';
-import { ForbiddenError, NotFoundError } from '../utils/customErrors.js';
-import ROLES from '../constants/roles.js';
+import { ForbiddenError } from '../utils/customErrors.js';
 import asyncWrapper from '../utils/asyncWrapper.js';
 
 const checkProjectAccess = asyncWrapper(async (req, res, next) => {
@@ -22,33 +21,14 @@ const checkProjectAccess = asyncWrapper(async (req, res, next) => {
     throw new ForbiddenError('Not authenticated');
   }
 
-  // 1. Admins have global access
-  if (user.role === ROLES.ADMIN) {
-    return next();
-  }
+  // Reusable service-level access check
+  await projectService.validateProjectAccess(projectId, user);
 
-  // 2. Fetch the project
+  // Fetch project context to attach to request context
   const project = await projectRepository.findById(projectId);
-  if (!project) {
-    throw new NotFoundError('Project not found');
-  }
-
-  // Attach project context to request so controllers don't need to query it again
   req.projectContext = project;
 
-  // 3. Project Managers have access if they own the project
-  if (user.role === ROLES.PROJECT_MANAGER && project.managerId.toString() === user._id.toString()) {
-    return next();
-  }
-
-  // 4. Check if user is assigned to the Project Team (Engineers, Contractors, Suppliers, PMs)
-  const isTeamMember = await projectTeamRepository.isUserOnProjectTeam(projectId, user._id);
-  if (isTeamMember) {
-    return next();
-  }
-
-  // Otherwise, deny access
-  throw new ForbiddenError('Access Denied: You are not assigned to this project workspace team');
+  next();
 });
 
 export {

@@ -203,4 +203,24 @@ describe('Project Workspace Management Endpoints API tests', () => {
       expect(res.status).toBe(403);
     });
   });
+
+  describe('GET /api/v1/projects (List & Search)', () => {
+    it('should apply project manager filters when search query is active', async () => {
+      projectTeamRepository.findByUser.mockResolvedValue([]);
+      projectRepository.findAll.mockImplementation(async ({ filter, search }) => {
+        expect(filter.$or).toBeDefined();
+        expect(filter.$or).toContainEqual({ managerId: managerUser._id });
+        expect(search).toBe('tower');
+        return { data: [mockProject], total: 1, page: 1, limit: 10, totalPages: 1 };
+      });
+
+      const res = await request(app)
+        .get('/api/v1/projects?search=tower')
+        .set('Authorization', `Bearer ${managerToken}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.projects.length).toBe(1);
+    });
+  });
 });

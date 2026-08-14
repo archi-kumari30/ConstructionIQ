@@ -3,6 +3,7 @@ import incidentRepository from '../repositories/incidentRepository.js';
 import aiInsightRepository from '../repositories/aiInsightRepository.js';
 import projectRepository from '../repositories/projectRepository.js';
 import auditLogService from './auditLogService.js';
+import projectService from './projectService.js';
 import reportQueue from '../jobs/reportQueue.js';
 import socketService from '../socket/socketService.js';
 import { ConflictError, NotFoundError } from '../utils/customErrors.js';
@@ -88,11 +89,12 @@ class ReportService {
     return report;
   }
 
-  async getDailyReportById(id) {
+  async getDailyReportById(id, user) {
     const report = await dailySiteReportRepository.findById(id);
     if (!report) {
       throw new NotFoundError('Daily site report not found');
     }
+    await projectService.validateProjectAccess(report.projectId, user);
     return report;
   }
 
@@ -130,11 +132,12 @@ class ReportService {
     return incident;
   }
 
-  async updateIncident(incidentId, updateData, userId, uploadedImages = []) {
+  async updateIncident(incidentId, updateData, user, uploadedImages = []) {
     const incident = await incidentRepository.findByIdRaw(incidentId);
     if (!incident) {
       throw new NotFoundError('Incident log entry not found');
     }
+    await projectService.validateProjectAccess(incident.projectId, user);
 
     const updates = { ...updateData };
     if (uploadedImages.length > 0) {
@@ -144,7 +147,7 @@ class ReportService {
     const updatedIncident = await incidentRepository.update(incidentId, updates);
 
     await auditLogService.logAction({
-      userId,
+      userId: user._id,
       action: 'INCIDENT_UPDATE',
       entity: 'Incident',
       entityId: incidentId,
@@ -154,11 +157,12 @@ class ReportService {
     return updatedIncident;
   }
 
-  async getIncidentById(id) {
+  async getIncidentById(id, user) {
     const incident = await incidentRepository.findById(id);
     if (!incident) {
       throw new NotFoundError('Incident log entry not found');
     }
+    await projectService.validateProjectAccess(incident.projectId, user);
     return incident;
   }
 

@@ -3,8 +3,9 @@ import projectTeamRepository from '../repositories/projectTeamRepository.js';
 import projectMilestoneRepository from '../repositories/projectMilestoneRepository.js';
 import auditLogService from './auditLogService.js';
 import userRepository from '../repositories/userRepository.js';
-import { ConflictError, BadRequestError, NotFoundError } from '../utils/customErrors.js';
+import { ConflictError, BadRequestError, NotFoundError, ForbiddenError } from '../utils/customErrors.js';
 import logger from '../config/logger.js';
+import ROLES from '../constants/roles.js';
 
 class ProjectService {
   // --- Projects ---
@@ -222,6 +223,38 @@ class ProjectService {
 
   async listMilestones(projectId, { filter = {}, page = 1, limit = 10 } = {}) {
     return await projectMilestoneRepository.findByProject(projectId, { filter, page, limit });
+  }
+
+  async validateProjectAccess(projectId, user) {
+    if (!projectId) {
+      throw new BadRequestError('Project ID context is required');
+    }
+
+    // 1. Admins have global access
+    if (user.role === ROLES.ADMIN) {
+      return;
+    }
+
+    // 2. Fetch the project
+    const project = await projectRepository.findById(projectId);
+    if (!project) {
+      throw new NotFoundError('Project not found');
+    }
+
+    // 3. Project Managers have access if they own the project
+    const managerId = project.managerId._id || project.managerId;
+    if (user.role === ROLES.PROJECT_MANAGER && managerId.toString() === user._id.toString()) {
+      return;
+    }
+
+    // 4. Check if user is assigned to the Project Team
+    const isTeamMember = await projectTeamRepository.isUserOnProjectTeam(projectId, user._id);
+    if (isTeamMember) {
+      return;
+    }
+
+    // Otherwise, deny access
+    throw new ForbiddenError('Access Denied: You are not assigned to this project workspace team');
   }
 }
 
