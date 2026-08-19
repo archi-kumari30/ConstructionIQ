@@ -16,6 +16,7 @@ class MaterialRequestDto {
         email: request.requestedBy.email || null
       } : null,
       quantityRequested: request.quantityRequested,
+      urgency: request.urgency || 'medium',
       status: request.status,
       approvedBy: request.approvedBy ? {
         id: request.approvedBy._id || request.approvedBy.id || request.approvedBy,

@@ -56,9 +56,14 @@ const usersToSeed = [
   }
 ];
 
+import dns from 'node:dns';
+
 const seedUsers = async () => {
   try {
     const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/constructioniq';
+    if (mongoUri.startsWith('mongodb+srv://')) {
+      dns.setServers(['1.1.1.1', '8.8.8.8']);
+    }
     logger.info('Connecting to database for seeding...');
     await mongoose.connect(mongoUri);
     logger.info('Database connected. Starting user seeding...');

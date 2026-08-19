@@ -34,7 +34,8 @@ const createRequestSchema = Joi.object({
   quantityRequested: Joi.number().greater(0).required().messages({
     'any.required': 'Quantity requested is required',
     'number.greater': 'Quantity must be greater than zero'
-  })
+  }),
+  urgency: Joi.string().valid('low', 'medium', 'high', 'critical').optional().default('medium')
 });
 
 const approveRequestSchema = Joi.object({

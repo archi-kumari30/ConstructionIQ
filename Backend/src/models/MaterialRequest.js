@@ -28,6 +28,11 @@ const MaterialRequestSchema = new mongoose.Schema(
       enum: Object.values(STATUS.MATERIAL_REQUEST),
       default: STATUS.MATERIAL_REQUEST.PENDING
     },
+    urgency: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'critical'],
+      default: 'medium'
+    },
     approvedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
