@@ -7,25 +7,26 @@ const Login = () => {
   const { login, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  // Destination path (redirects to dashboard if no state)
+  // Redirect destination after successful login
   const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
 
     const res = await login(email.trim(), password);
+
     if (res.success) {
       navigate(from, { replace: true });
     } else {
@@ -34,98 +35,173 @@ const Login = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      backgroundColor: 'var(--bg)',
-      color: 'var(--text-primary)',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: '24px',
-      position: 'relative',
-      fontFamily: 'var(--sans)',
-      overflow: 'hidden'
-    }}>
-      {/* Faint blueprint coordinate grid background */}
-      <div style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
-        backgroundImage: 'linear-gradient(rgba(193, 68, 14, 0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(193, 68, 14, 0.012) 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
-        maskImage: 'radial-gradient(ellipse at center, black, transparent 80%)',
-        WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 80%)',
-        pointerEvents: 'none',
-        zIndex: 1
-      }}></div>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--bg)',
+        color: 'var(--text-primary)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '24px',
+        position: 'relative',
+        fontFamily: 'var(--sans)',
+        overflow: 'hidden'
+      }}
+    >
+      {/* Blueprint grid background */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage:
+            'linear-gradient(rgba(193, 68, 14, 0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(193, 68, 14, 0.012) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          maskImage:
+            'radial-gradient(ellipse at center, black, transparent 80%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse at center, black, transparent 80%)',
+          pointerEvents: 'none',
+          zIndex: 1
+        }}
+      />
 
-      {/* Decorative architectural measurement lines */}
-      <div style={{
-        position: 'absolute',
-        top: '40px',
-        left: '40px',
-        width: '120px',
-        height: '1px',
-        backgroundColor: 'var(--border)',
-        zIndex: 2
-      }}></div>
-      <div style={{
-        position: 'absolute',
-        top: '40px',
-        left: '40px',
-        width: '1px',
-        height: '120px',
-        backgroundColor: 'var(--border)',
-        zIndex: 2
-      }}></div>
+      {/* Architectural measurement lines */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '40px',
+          left: '40px',
+          width: '120px',
+          height: '1px',
+          backgroundColor: 'var(--border)',
+          zIndex: 2
+        }}
+      />
 
-      <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '420px', textAlign: 'center' }}>
-        
+      <div
+        style={{
+          position: 'absolute',
+          top: '40px',
+          left: '40px',
+          width: '1px',
+          height: '120px',
+          backgroundColor: 'var(--border)',
+          zIndex: 2
+        }}
+      />
+
+      {/* Main content */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          maxWidth: '420px',
+          textAlign: 'center'
+        }}
+      >
         {/* Logo */}
-        <Link 
-          to="/" 
-          style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: '8px', 
-            textDecoration: 'none', 
-            color: 'var(--text-primary)', 
-            marginBottom: '12px' 
+        <Link
+          to="/"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            textDecoration: 'none',
+            color: 'var(--text-primary)',
+            marginBottom: '12px'
           }}
         >
-          <div style={{ width: '4px', height: '18px', backgroundColor: 'var(--accent)' }}></div>
-          <span style={{ fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-title)', letterSpacing: '0.5px' }}>CONSTRUCTIONIQ</span>
+          <div
+            style={{
+              width: '4px',
+              height: '18px',
+              backgroundColor: 'var(--accent)'
+            }}
+          />
+
+          <span
+            style={{
+              fontWeight: 800,
+              fontSize: '18px',
+              fontFamily: 'var(--font-title)',
+              letterSpacing: '0.5px'
+            }}
+          >
+            CONSTRUCTIONIQ
+          </span>
         </Link>
 
-        {/* Technical label */}
-        <div style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 650, letterSpacing: '1px', textTransform: 'uppercase', fontFamily: 'var(--font-title)', marginBottom: '16px' }}>
+        {/* Authentication label */}
+        <div
+          style={{
+            fontSize: '10px',
+            color: 'var(--accent)',
+            fontWeight: 650,
+            letterSpacing: '1px',
+            textTransform: 'uppercase',
+            fontFamily: 'var(--font-title)',
+            marginBottom: '16px'
+          }}
+        >
           AUTHENTICATION
         </div>
 
-        {/* Technical header */}
-        <div style={{ marginBottom: '24px', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-title)', margin: '0 0 6px 0' }}>Welcome back.</h2>
-          <span style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>Sign in to continue to your construction workspace.</span>
+        {/* Header */}
+        <div
+          style={{
+            marginBottom: '24px',
+            textAlign: 'center'
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '24px',
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-title)',
+              margin: '0 0 6px 0'
+            }}
+          >
+            Welcome back.
+          </h2>
+
+          <span
+            style={{
+              fontSize: '13.5px',
+              color: 'var(--text-muted)'
+            }}
+          >
+            Sign in to continue to your construction workspace.
+          </span>
         </div>
 
+        {/* Error message */}
         {error && (
-          <div style={{
-            backgroundColor: 'var(--error-bg)',
-            color: 'var(--error)',
-            border: '1px solid rgba(220, 38, 38, 0.1)',
-            borderRadius: '6px',
-            padding: '10px 14px',
-            fontSize: '12.5px',
-            fontWeight: 500,
-            marginBottom: '20px',
-            textAlign: 'left'
-          }}>
+          <div
+            style={{
+              backgroundColor: 'var(--error-bg)',
+              color: 'var(--error)',
+              border: '1px solid rgba(220, 38, 38, 0.1)',
+              borderRadius: '6px',
+              padding: '10px 14px',
+              fontSize: '12.5px',
+              fontWeight: 500,
+              marginBottom: '20px',
+              textAlign: 'left'
+            }}
+          >
             {error}
           </div>
         )}
 
-        {/* Login Panel - Structured card */}
-        <div 
+        {/* Login Card */}
+        <div
           style={{
             backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',
@@ -136,8 +212,29 @@ const Login = () => {
           }}
         >
           <form onSubmit={handleSubmit}>
-            <div className="form-group" style={{ marginBottom: '18px' }}>
-              <label className="form-label" style={{ fontSize: '11px', fontWeight: 650, color: 'var(--text-primary)', marginBottom: '6px', display: 'block', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-title)' }}>EMAIL ADDRESS</label>
+            {/* Email */}
+            <div
+              className="form-group"
+              style={{
+                marginBottom: '18px'
+              }}
+            >
+              <label
+                className="form-label"
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 650,
+                  color: 'var(--text-primary)',
+                  marginBottom: '6px',
+                  display: 'block',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  fontFamily: 'var(--font-title)'
+                }}
+              >
+                EMAIL ADDRESS
+              </label>
+
               <input
                 type="email"
                 value={email}
@@ -157,17 +254,64 @@ const Login = () => {
                   outline: 'none',
                   transition: 'border-color 0.2s ease'
                 }}
-                onFocus={(e) => e.target.style.borderColor = 'var(--accent)'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--accent)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--border)';
+                }}
               />
             </div>
 
-            <div className="form-group" style={{ marginBottom: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <label className="form-label" style={{ fontSize: '11px', fontWeight: 650, color: 'var(--text-primary)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'var(--font-title)' }}>PASSWORD</label>
-                <Link to="/forgot-password" style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', fontFamily: 'var(--font-title)' }}>FORGOT PASSWORD?</Link>
+            {/* Password */}
+            <div
+              className="form-group"
+              style={{
+                marginBottom: '24px'
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '6px'
+                }}
+              >
+                <label
+                  className="form-label"
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 650,
+                    color: 'var(--text-primary)',
+                    margin: 0,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    fontFamily: 'var(--font-title)'
+                  }}
+                >
+                  PASSWORD
+                </label>
+
+                <Link
+                  to="/forgot-password"
+                  style={{
+                    fontSize: '11px',
+                    color: 'var(--accent)',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    fontFamily: 'var(--font-title)'
+                  }}
+                >
+                  FORGOT PASSWORD?
+                </Link>
               </div>
-              <div style={{ position: 'relative' }}>
+
+              <div
+                style={{
+                  position: 'relative'
+                }}
+              >
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
@@ -188,9 +332,14 @@ const Login = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = 'var(--accent)'}
-                  onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = 'var(--accent)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'var(--border)';
+                  }}
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -207,13 +356,18 @@ const Login = () => {
                     alignItems: 'center'
                   }}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
                 </button>
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            {/* Sign In Button */}
+            <button
+              type="submit"
               disabled={loading}
               style={{
                 width: '100%',
@@ -230,30 +384,99 @@ const Login = () => {
                 cursor: 'pointer',
                 transition: 'background-color 0.2s ease'
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'var(--accent)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = 'var(--primary)'}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = 'var(--accent)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = 'var(--primary)';
+              }}
             >
               {loading ? 'Verifying Access...' : 'SIGN IN →'}
             </button>
           </form>
 
-          {/* Footer of card */}
-          <div style={{ borderTop: '1px solid var(--border)', marginTop: '24px', paddingTop: '16px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', fontSize: '11px' }}>
-            <Link to="/" style={{ color: 'var(--text-muted)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          {/* Footer */}
+          <div
+            style={{
+              borderTop: '1px solid var(--border)',
+              marginTop: '24px',
+              paddingTop: '16px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontSize: '11px',
+              gap: '12px'
+            }}
+          >
+            {/* Sign Up */}
+            <span
+              style={{
+                color: 'var(--text-muted)'
+              }}
+            >
+              Don't have an account?{' '}
+              <Link
+                to="/register"
+                style={{
+                  color: 'var(--accent)',
+                  fontWeight: 600,
+                  textDecoration: 'none'
+                }}
+              >
+                SIGN UP
+              </Link>
+            </span>
+
+            {/* Back to Website */}
+            <Link
+              to="/"
+              style={{
+                color: 'var(--text-muted)',
+                fontWeight: 600,
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                whiteSpace: 'nowrap'
+              }}
+            >
               <span>← BACK TO WEBSITE</span>
             </Link>
           </div>
         </div>
 
-        {/* Bottom Technical Status strip */}
-        <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', fontFamily: 'var(--font-title)' }}>
+        {/* Bottom status */}
+        <div
+          style={{
+            marginTop: '24px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            fontSize: '10px',
+            color: 'var(--text-muted)',
+            fontFamily: 'var(--font-title)'
+          }}
+        >
           <span>CONSTRUCTIONIQ / AUTH</span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--success)' }}></span>
+
+          <span
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            <span
+              style={{
+                width: '5px',
+                height: '5px',
+                borderRadius: '50%',
+                backgroundColor: 'var(--success)'
+              }}
+            />
+
             <span>SYSTEM STATUS: OPERATIONAL</span>
           </span>
         </div>
-
       </div>
     </div>
   );
