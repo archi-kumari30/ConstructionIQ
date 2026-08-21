@@ -40,7 +40,8 @@ export const SocketProvider = ({ children }) => {
 
     // In production, Vite reverse proxies /socket.io to backend port 5000.
     // In standalone or test setups, we connect to the current host origin.
-    const newSocket = io({
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || undefined;
+    const newSocket = io(socketUrl, {
       autoConnect: true,
       reconnectionAttempts: 5,
     });

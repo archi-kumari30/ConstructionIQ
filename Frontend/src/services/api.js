@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -85,7 +87,7 @@ api.interceptors.response.use(
 
     try {
       // Call silent refresh-token endpoint
-      const response = await axios.post('/api/v1/auth/refresh-token', {}, { withCredentials: true });
+      const response = await axios.post(`${baseURL}/auth/refresh-token`, {}, { withCredentials: true });
       const { accessToken: newToken } = response.data.data;
       
       setAccessToken(newToken);

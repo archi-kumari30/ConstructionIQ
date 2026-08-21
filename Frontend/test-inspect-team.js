@@ -11,7 +11,7 @@ const check = async () => {
   try {
     // 1. Log in
     const loginRes = await api.post('/auth/login', {
-      email: 'projectmanager@example.com',
+      email: 'pm@constructioniq.com',
       password: 'password123'
     });
     const token = loginRes.data.data.tokens.accessToken;
