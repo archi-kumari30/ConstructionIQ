@@ -6,17 +6,20 @@ import api from '../services/api';
 import {
   LayoutDashboard,
   FolderKanban,
-  FileSpreadsheet,
+  Layers,
+  Wrench,
   Truck,
-  Users,
-  User,
+  ClipboardList,
+  ShieldAlert,
+  FileSpreadsheet,
+  Calendar,
+  Settings,
+  MessageSquare,
   LogOut,
   Bell,
+  ChevronDown,
   Menu,
   X,
-  ChevronDown,
-  ShieldAlert,
-  ClipboardList,
   Search
 } from 'lucide-react';
 
@@ -36,7 +39,7 @@ const Layout = () => {
   const notifRef = useRef(null);
   const userRef = useRef(null);
 
-  // Monitor scroll for height shrink (72px -> 60px)
+  // Monitor scroll state
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -79,14 +82,11 @@ const Layout = () => {
 
   // Synchronize project name selector
   const syncProjectName = () => {
-    // 1. Check path parameter id /projects/:id
     const match = location.pathname.match(/^\/projects\/([a-f\d\-]+)/i);
     const pathProjectId = match ? match[1] : null;
-
-    // 2. Check localStorage key updated by pages dropdown selections
     const savedProjectId = localStorage.getItem('activeProjectId');
-
     const targetId = pathProjectId || savedProjectId;
+    
     if (targetId && projects.length > 0) {
       const proj = projects.find(p => p._id === targetId || p.id === targetId);
       if (proj) {
@@ -128,355 +128,462 @@ const Layout = () => {
     return role.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   };
 
+  // Role aware links:
+  const materialsPath = isAdmin ? '/materials' : '/materials/inventory';
+  const equipmentPath = isAdmin ? '/equipment' : '/equipment/bookings';
+
   return (
-    <div className="layout-container">
-      {/* Horizontal Sticky Navbar */}
-      <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="navbar-left">
-          {/* Logo with horizontal vertical oxide indicator line */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/dashboard" className="navbar-logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div className="navbar-logo-indicator"></div>
-              <span className="navbar-logo-text" style={{ fontFamily: 'var(--sans)', fontWeight: 500 }}>CONSTRUCTIONIQ</span>
-            </Link>
-          </div>
+    <div className="layout-root" style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg)', fontFamily: 'var(--sans)', color: 'var(--text-primary)' }}>
+      
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            backgroundColor: 'rgba(26, 26, 26, 0.4)',
+            zIndex: 999,
+            transition: 'opacity 0.2s ease'
+          }}
+        />
+      )}
 
-          {/* Subtly Grouped Sections */}
-          <nav className="navbar-menu">
-            <NavLink to="/dashboard" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`} end>
-              <span>Dashboard</span>
-            </NavLink>
-            <NavLink to="/projects" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-              <span>Projects</span>
-            </NavLink>
-            
-            {!isSupplier && (
-              <div className="navbar-dropdown" style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                <button className={`navbar-link ${location.pathname.startsWith('/materials') ? 'active' : ''} navbar-dropdown-trigger`}>
-                  <span>Materials</span>
-                  <ChevronDown size={12} />
-                </button>
-                <div className="navbar-dropdown-content" style={{ marginTop: '0px' }}>
-                  <div style={{ padding: '6px 16px 2px 16px', fontSize: '9px', fontWeight: 500, color: '#A64B2A', letterSpacing: '0.5px' }}>MATERIALS</div>
-                  <NavLink to="/materials/requests" className="navbar-dropdown-item">Material Requests</NavLink>
-                  <NavLink to="/materials/inventory" className="navbar-dropdown-item">Inventory Status</NavLink>
-                  <NavLink to="/materials/deliveries" className="navbar-dropdown-item">Deliveries Log</NavLink>
-                  {isAdmin && (
-                    <NavLink to="/materials" className="navbar-dropdown-item" style={{ borderTop: '1px solid #C9C5BD', marginTop: '4px', paddingTop: '8px' }}>
-                      Master Catalog
-                    </NavLink>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {!isSupplier && (
-              <div className="navbar-dropdown" style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                <button className={`navbar-link ${location.pathname.startsWith('/equipment') ? 'active' : ''} navbar-dropdown-trigger`}>
-                  <span>Equipment</span>
-                  <ChevronDown size={12} />
-                </button>
-                <div className="navbar-dropdown-content" style={{ marginTop: '0px' }}>
-                  <div style={{ padding: '6px 16px 2px 16px', fontSize: '9px', fontWeight: 500, color: '#A64B2A', letterSpacing: '0.5px' }}>EQUIPMENT</div>
-                  <NavLink to="/equipment/bookings" className="navbar-dropdown-item">Fleet Bookings</NavLink>
-                  {isAdmin && (
-                    <NavLink to="/equipment" className="navbar-dropdown-item" style={{ borderTop: '1px solid #C9C5BD', marginTop: '4px', paddingTop: '8px' }}>
-                      Master Fleet Catalog
-                    </NavLink>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {!isSupplier && (
-              <div className="navbar-dropdown" style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
-                <button className={`navbar-link ${location.pathname.startsWith('/suppliers') || location.pathname.startsWith('/incidents') || location.pathname.startsWith('/reports') ? 'active' : ''} navbar-dropdown-trigger`}>
-                  <span>More</span>
-                  <ChevronDown size={12} />
-                </button>
-                <div className="navbar-dropdown-content" style={{ marginTop: '0px' }}>
-                  <div style={{ padding: '6px 16px 2px 16px', fontSize: '9px', fontWeight: 500, color: '#A64B2A', letterSpacing: '0.5px' }}>RESOURCES & CONTROL</div>
-                  <NavLink to="/suppliers" className="navbar-dropdown-item">Suppliers</NavLink>
-                  <NavLink to="/incidents" className="navbar-dropdown-item">Incidents</NavLink>
-                  <NavLink to="/reports" className="navbar-dropdown-item">Reports</NavLink>
-                </div>
-              </div>
-            )}
-          </nav>
-        </div>
-
-        <div className="navbar-right">
-          
-          {/* Compact Global Search Input */}
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              const val = e.target.elements.globalsearch.value;
-              if (val.trim()) {
-                navigate(`/search?q=${encodeURIComponent(val)}`);
-                e.target.reset();
-              }
-            }}
-            style={{ position: 'relative', display: 'flex', alignItems: 'center', marginRight: '16px' }}
-          >
-            <Search size={14} color="#5F6870" style={{ position: 'absolute', left: '10px', pointerEvents: 'none' }} />
-            <input
-              type="text"
-              name="globalsearch"
-              placeholder="Search materials, equipment, suppliers..."
-              style={{
-                height: '32px',
-                width: '240px',
-                padding: '0 12px 0 28px',
-                fontSize: '12px',
-                borderRadius: '6px',
-                border: '1px solid #C9C5BD',
-                backgroundColor: '#FFFFFF',
-                color: '#1E252B',
-                fontFamily: 'var(--sans)',
-                outline: 'none',
-                transition: 'width 0.2s cubic-bezier(0.22, 1, 0.36, 1)'
-              }}
-              onFocus={(e) => e.target.style.width = '300px'}
-              onBlur={(e) => e.target.style.width = '240px'}
-            />
-          </form>
-
-          {/* Real Selected Project Context Indicator */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', borderLeft: '1px solid #C9C5BD', paddingLeft: '16px', marginRight: '8px' }}>
-            <span style={{ fontSize: '9px', fontWeight: 500, color: '#5F6870', letterSpacing: '0.5px', textTransform: 'uppercase' }}>CURRENT PROJECT</span>
-            <span style={{ fontSize: '12px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--sans)' }}>{currentProjectName}</span>
-          </div>
-
-          {/* Notification Bell Dropdown */}
-          <div style={{ position: 'relative' }} ref={notifRef}>
-            <button
-              onClick={() => setNotifOpen(!notifOpen)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#1E252B',
-                position: 'relative',
-                padding: '8px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'background-color 0.2s ease'
-              }}
-              className="navbar-dropdown-trigger-btn"
-            >
-              <Bell size={20} />
-              {toasts.length > 0 && (
-                <span style={{
-                  position: 'absolute',
-                  top: '8px',
-                  right: '8px',
-                  width: '6px',
-                  height: '6px',
-                  backgroundColor: '#A64B2A',
-                  borderRadius: '50%'
-                }}></span>
-              )}
-            </button>
-
-            {notifOpen && (
-              <div className="card" style={{
-                position: 'absolute',
-                top: '44px',
-                right: 0,
-                width: '320px',
-                padding: '16px',
-                zIndex: 1200,
-                boxShadow: 'var(--shadow-lg)',
-                border: '1px solid #C9C5BD',
-                borderRadius: '10px',
-                backgroundColor: '#F7F4EE'
-              }}>
-                <div style={{
-                  fontWeight: 500,
-                  fontSize: '13px',
-                  borderBottom: '1px solid #C9C5BD',
-                  paddingBottom: '10px',
-                  marginBottom: '10px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                  <span>Operations Alerts ({toasts.length})</span>
-                  {toasts.length > 0 && (
-                    <button
-                      onClick={() => toasts.forEach(t => removeToast(t.id))}
-                      style={{ background: 'none', border: 'none', color: '#A64B2A', fontSize: '11px', cursor: 'pointer', fontWeight: 500 }}
-                    >
-                      Clear All
-                    </button>
-                  )}
-                </div>
-                {toasts.length === 0 ? (
-                  <div style={{ padding: '24px 0', color: 'var(--text-muted)', fontSize: '12px', textAlign: 'center' }}>
-                    No unread notifications in this session.
-                  </div>
-                ) : (
-                  <div style={{ maxHeight: '240px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {toasts.map((toast) => (
-                      <div
-                        key={toast.id}
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '2px',
-                          padding: '8px',
-                          backgroundColor: '#FFFFFF',
-                          borderRadius: '6px',
-                          border: '1px solid #C9C5BD',
-                          borderLeft: '4px solid ' + (toast.type === 'danger' || toast.type === 'error' ? '#C62828' : toast.type === 'warning' ? '#EF6C00' : '#0A4174'),
-                          textAlign: 'left'
-                        }}
-                      >
-                        <div style={{ fontSize: '12px', fontWeight: 500, color: 'var(--text-primary)' }}>{toast.title}</div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{toast.message}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* User Dropdown Menu */}
-          <div style={{ position: 'relative' }} ref={userRef}>
-            <button className="navbar-user-btn" onClick={() => setUserDropdownOpen(!userDropdownOpen)}>
-              <div className="navbar-user-avatar">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
-              </div>
-              <div className="navbar-user-info">
-                <div className="navbar-user-name">{user?.name}</div>
-                <div className="navbar-user-role">{formatRole(user?.role)}</div>
-              </div>
-              <ChevronDown size={14} color="var(--text-muted)" />
-            </button>
-
-            {userDropdownOpen && (
-              <div className="card" style={{
-                position: 'absolute',
-                top: '48px',
-                right: 0,
-                width: '180px',
-                padding: '6px 0',
-                zIndex: 1200,
-                boxShadow: '0 4px 12px rgba(30, 37, 43, 0.05)',
-                border: '1px solid #C9C5BD',
-                borderRadius: '8px',
-                backgroundColor: '#F7F4EE'
-              }}>
-                <div style={{ padding: '8px 16px', borderBottom: '1px solid #C9C5BD', marginBottom: '4px' }}>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Signed in as</div>
-                  <div style={{ fontWeight: 500, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email}</div>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    width: '100%',
-                    padding: '8px 16px',
-                    border: 'none',
-                    background: 'none',
-                    color: '#A64B2A',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    textAlign: 'left'
-                  }}
-                  className="navbar-dropdown-item"
-                >
-                  <LogOut size={14} />
-                  <span>Sign Out</span>
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Mobile Menu Toggle Button */}
-          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile Dropdown Navigation */}
-      <div className={`mobile-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-        <NavLink to="/dashboard" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`} end>
-          <LayoutDashboard size={16} />
-          <span>Dashboard</span>
-        </NavLink>
-        
-        <NavLink to="/projects" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-          <FolderKanban size={16} />
-          <span>Projects</span>
-        </NavLink>
-
-        {!isSupplier && (
-          <>
-            <div style={{ padding: '6px 14px', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Materials</div>
-            <div className="mobile-nav-submenu">
-              <NavLink to="/materials/requests" className="navbar-link">Requests</NavLink>
-              <NavLink to="/materials/inventory" className="navbar-link">Inventory</NavLink>
-              <NavLink to="/materials/deliveries" className="navbar-link">Deliveries</NavLink>
-              {isAdmin && <NavLink to="/materials" className="navbar-link">Master Catalog</NavLink>}
-            </div>
-          </>
-        )}
-
-        {!isSupplier && (
-          <>
-            <div style={{ padding: '6px 14px', fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Equipment</div>
-            <div className="mobile-nav-submenu">
-              <NavLink to="/equipment/bookings" className="navbar-link">Bookings</NavLink>
-              {isAdmin && <NavLink to="/equipment" className="navbar-link">Master Fleet</NavLink>}
-            </div>
-          </>
-        )}
-
-        {!isSupplier && (
-          <NavLink to="/suppliers" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-            <Users size={16} />
-            <span>Suppliers</span>
-          </NavLink>
-        )}
-
-        {!isSupplier && (
-          <NavLink to="/incidents" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-            <ShieldAlert size={16} />
-            <span>Incidents</span>
-          </NavLink>
-        )}
-
-        {!isSupplier && (
-          <NavLink to="/reports" className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}>
-            <ClipboardList size={16} />
-            <span>Reports</span>
-          </NavLink>
-        )}
-      </div>
-
-      {/* Main Container */}
-      <main className="main-content">
-        <div className="page-body">
-          <Outlet />
-        </div>
-      </main>
-
-      {/* Mini layout dropdown stylesheet hover overrides */}
+      {/* Dynamic responsive Stylesheet */}
       <style>{`
-        .navbar-dropdown-trigger-btn:hover {
-          background-color: rgba(30, 37, 43, 0.03) !important;
-          color: #1E252B !important;
+        .app-sidebar {
+          width: 260px;
+          background-color: var(--bg);
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          position: fixed;
+          top: 0; bottom: 0; left: 0;
+          z-index: 1000;
+          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .main-panel {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          margin-left: 260px;
+          min-width: 0;
+        }
+
+        .sidebar-link {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 16px;
+          color: var(--text-muted);
+          font-size: 13.5px;
+          font-weight: 500;
+          text-decoration: none;
+          border-radius: 6px;
+          border-left: 3px solid transparent;
+          transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+          color: var(--text-primary);
+          background-color: rgba(193, 68, 14, 0.03);
+        }
+
+        .sidebar-link.active {
+          color: var(--accent);
+          background-color: rgba(193, 68, 14, 0.08);
+          border-left-color: var(--accent);
+          font-weight: 600;
+        }
+
+        .topbar-icon-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: var(--text-primary);
+          padding: 8px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.2s ease;
+        }
+
+        .topbar-icon-btn:hover {
+          background-color: rgba(193, 68, 14, 0.04);
+        }
+
+        @media (max-width: 1024px) {
+          .app-sidebar {
+            transform: translateX(-100%);
+          }
+          .app-sidebar.open {
+            transform: translateX(0);
+          }
+          .main-panel {
+            margin-left: 0 !important;
+          }
+          .mobile-burger-btn {
+            display: flex !important;
+          }
+          .topbar-search-form {
+            display: none !important;
+          }
+        }
+
+        @media (min-width: 1025px) {
+          .app-sidebar {
+            transform: translateX(0) !important;
+          }
+          .mobile-burger-btn {
+            display: none !important;
+          }
         }
       `}</style>
+
+      {/* Desktop & Mobile Responsive Sidebar */}
+      <aside className={`app-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        
+        {/* Sidebar Header Brand block */}
+        <div style={{ height: '72px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px' }}>
+          <Link to="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+            <div style={{ width: '4px', height: '18px', backgroundColor: 'var(--accent)' }}></div>
+            <span style={{ fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-title)', letterSpacing: '0.5px', color: 'var(--text-primary)' }}>CONSTRUCTIONIQ</span>
+          </Link>
+          <button 
+            className="mobile-burger-btn" 
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+          >
+            <X size={18} color="var(--text-muted)" />
+          </button>
+        </div>
+
+        {/* Sidebar Navigation Items */}
+        <nav style={{ padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, overflowY: 'auto' }}>
+          <NavLink to="/dashboard" className="sidebar-link">
+            <LayoutDashboard size={18} />
+            <span>Dashboard</span>
+          </NavLink>
+
+          <NavLink to="/projects" className="sidebar-link">
+            <FolderKanban size={18} />
+            <span>Projects</span>
+          </NavLink>
+
+          {!isSupplier && (
+            <NavLink to={materialsPath} className="sidebar-link">
+              <Layers size={18} />
+              <span>Materials</span>
+            </NavLink>
+          )}
+
+          {!isSupplier && (
+            <NavLink to={equipmentPath} className="sidebar-link">
+              <Wrench size={18} />
+              <span>Equipment</span>
+            </NavLink>
+          )}
+
+          {!isSupplier && (
+            <NavLink to="/materials/deliveries" className="sidebar-link">
+              <Truck size={18} />
+              <span>Deliveries</span>
+            </NavLink>
+          )}
+
+          {!isSupplier && (
+            <NavLink to="/site-operations" className="sidebar-link">
+              <ClipboardList size={18} />
+              <span>Site Operations</span>
+            </NavLink>
+          )}
+
+          {!isSupplier && (
+            <NavLink to="/safety" className="sidebar-link">
+              <ShieldAlert size={18} />
+              <span>Safety</span>
+            </NavLink>
+          )}
+
+          {!isSupplier && (
+            <NavLink to="/reports" className="sidebar-link">
+              <FileSpreadsheet size={18} />
+              <span>Reports</span>
+            </NavLink>
+          )}
+
+          <NavLink to="/calendar" className="sidebar-link">
+            <Calendar size={18} />
+            <span>Calendar</span>
+          </NavLink>
+
+          <NavLink to="/settings" className="sidebar-link">
+            <Settings size={18} />
+            <span>Settings</span>
+          </NavLink>
+        </nav>
+
+        {/* User Card Profile Footer */}
+        <div style={{ borderTop: '1px solid var(--border)', padding: '20px 16px', display: 'flex', alignItems: 'center', gap: '12px', backgroundColor: 'rgba(193, 68, 14, 0.01)' }}>
+          <div style={{ width: '40px', height: '40px', backgroundColor: 'var(--accent)', color: '#FFFFFF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '15px' }}>
+            {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {user?.name || 'Archi Kumari'}
+            </span>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {formatRole(user?.role) || 'Project Manager'}
+            </span>
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Panel Wrapper */}
+      <div className="main-panel">
+        
+        {/* Horizontal TopBar */}
+        <header style={{
+          height: '72px',
+          backgroundColor: 'var(--surface)',
+          borderBottom: '1px solid var(--border)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 24px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 900
+        }}>
+          {/* TopBar Left Side (Burger toggle and Search Input) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1 }}>
+            <button 
+              className="mobile-burger-btn" 
+              onClick={() => setMobileMenuOpen(true)}
+              style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '6px' }}
+            >
+              <Menu size={22} color="var(--text-primary)" />
+            </button>
+
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const val = e.target.elements.globalsearch.value;
+                if (val.trim()) {
+                  navigate(`/search?q=${encodeURIComponent(val)}`);
+                  e.target.reset();
+                }
+              }}
+              className="topbar-search-form"
+              style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+            >
+              <Search size={15} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }} />
+              <input
+                type="text"
+                name="globalsearch"
+                placeholder="Search anything..."
+                style={{
+                  height: '38px',
+                  width: '260px',
+                  padding: '0 12px 0 34px',
+                  fontSize: '12.5px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border)',
+                  backgroundColor: '#FFFFFF',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'var(--sans)',
+                  outline: 'none',
+                  transition: 'width 0.25s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.width = '320px';
+                  e.target.style.borderColor = 'var(--accent)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.width = '260px';
+                  e.target.style.borderColor = 'var(--border)';
+                }}
+              />
+            </form>
+          </div>
+
+          {/* TopBar Right Side Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            
+            {/* Active Selected Project Context Label */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginRight: '8px' }}>
+              <span style={{ fontSize: '9px', fontWeight: 650, color: 'var(--text-muted)', letterSpacing: '0.5px', textTransform: 'uppercase' }}>CURRENT PROJECT</span>
+              <span style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-title)' }}>{currentProjectName}</span>
+            </div>
+
+            {/* Message square button */}
+            <button className="topbar-icon-btn">
+              <MessageSquare size={19} />
+            </button>
+
+            {/* Settings Link */}
+            <Link to="/settings" className="topbar-icon-btn" style={{ textDecoration: 'none' }}>
+              <Settings size={19} />
+            </Link>
+
+            {/* Notification Bell with Toasts overlay */}
+            <div style={{ position: 'relative' }} ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="topbar-icon-btn"
+                style={{ position: 'relative' }}
+              >
+                <Bell size={19} />
+                {toasts.length > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '6px',
+                    right: '6px',
+                    width: '6px',
+                    height: '6px',
+                    backgroundColor: 'var(--accent)',
+                    borderRadius: '50%'
+                  }}></span>
+                )}
+              </button>
+
+              {notifOpen && (
+                <div className="card" style={{
+                  position: 'absolute',
+                  top: '44px',
+                  right: 0,
+                  width: '320px',
+                  padding: '16px',
+                  zIndex: 1200,
+                  boxShadow: 'var(--shadow-lg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '8px',
+                  backgroundColor: '#FFFFFF',
+                  textAlign: 'left'
+                }}>
+                  <div style={{
+                    fontWeight: 600,
+                    fontSize: '13px',
+                    borderBottom: '1px solid var(--border)',
+                    paddingBottom: '10px',
+                    marginBottom: '10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span>Operations Alerts ({toasts.length})</span>
+                    {toasts.length > 0 && (
+                      <button
+                        onClick={() => toasts.forEach(t => removeToast(t.id))}
+                        style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}
+                      >
+                        Clear All
+                      </button>
+                    )}
+                  </div>
+                  {toasts.length === 0 ? (
+                    <div style={{ padding: '24px 0', color: 'var(--text-muted)', fontSize: '12px', textAlign: 'center' }}>
+                      No unread notifications in this session.
+                    </div>
+                  ) : (
+                    <div style={{ maxHeight: '240px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {toasts.map((toast) => (
+                        <div
+                          key={toast.id}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '2px',
+                            padding: '8px',
+                            backgroundColor: 'var(--bg)',
+                            borderRadius: '6px',
+                            border: '1px solid var(--border)',
+                            borderLeft: '4px solid ' + (toast.type === 'danger' || toast.type === 'error' ? 'var(--error)' : toast.type === 'warning' ? 'var(--warning)' : 'var(--accent)'),
+                          }}
+                        >
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>{toast.title}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{toast.message}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Profile Avatar Trigger dropdown */}
+            <div style={{ position: 'relative' }} ref={userRef}>
+              <button 
+                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+              >
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: 'var(--accent)', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '12px' }}>
+                  {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <ChevronDown size={14} color="var(--text-muted)" />
+              </button>
+
+              {userDropdownOpen && (
+                <div className="card" style={{
+                  position: 'absolute',
+                  top: '40px',
+                  right: 0,
+                  width: '180px',
+                  padding: '6px 0',
+                  zIndex: 1200,
+                  boxShadow: 'var(--shadow-md)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '6px',
+                  backgroundColor: '#FFFFFF',
+                  textAlign: 'left'
+                }}>
+                  <div style={{ padding: '8px 16px', borderBottom: '1px solid var(--border)', marginBottom: '4px' }}>
+                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Signed in as</div>
+                    <div style={{ fontWeight: 600, fontSize: '12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text-primary)' }}>{user?.email}</div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      width: '100%',
+                      padding: '8px 16px',
+                      border: 'none',
+                      background: 'none',
+                      color: 'var(--error)',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <LogOut size={13} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+          </div>
+        </header>
+
+        {/* Scrollable page body content */}
+        <main style={{ padding: '32px', flex: 1, minHeight: 0, overflowY: 'auto' }}>
+          <Outlet />
+        </main>
+      </div>
+
     </div>
   );
 };

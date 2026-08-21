@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useRef } from 'react';
 import api, { setAccessToken, getAccessToken } from '../services/api';
 
 const AuthContext = createContext(null);
@@ -60,8 +60,12 @@ export const AuthProvider = ({ children }) => {
     return null;
   };
 
+  const initialized = useRef(false);
+
   useEffect(() => {
     const initializeAuth = async () => {
+      if (initialized.current) return;
+      initialized.current = true;
       await fetchProfile();
       setLoading(false);
     };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Plus, Landmark, PiggyBank, DollarSign, Calendar, FileText, AlertTriangle } from 'lucide-react';
+import { formatINR } from '../../utils/format';
 
 const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
   const [budgets, setBudgets] = useState([]);
@@ -121,18 +122,18 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
       <div className="dashboard-stats" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
         <div className="kpi-card" style={{ padding: '16px' }}>
           <span className="kpi-title">Total Allocated Budget</span>
-          <span className="kpi-value">${totalAllocated.toLocaleString()}</span>
+          <span className="kpi-value">{formatINR(totalAllocated)}</span>
         </div>
         <div className="kpi-card" style={{ padding: '16px' }}>
           <span className="kpi-title">Total Expenses Logged</span>
           <span className="kpi-value" style={{ color: totalSpent > totalAllocated ? 'var(--error)' : 'var(--text-primary)' }}>
-            ${totalSpent.toLocaleString()}
+            {formatINR(totalSpent)}
           </span>
         </div>
         <div className="kpi-card" style={{ padding: '16px' }}>
           <span className="kpi-title">Remaining Margin</span>
           <span className="kpi-value" style={{ color: totalAllocated - totalSpent < 0 ? 'var(--error)' : 'var(--success)' }}>
-            ${(totalAllocated - totalSpent).toLocaleString()}
+            {formatINR(totalAllocated - totalSpent)}
           </span>
         </div>
       </div>
@@ -166,7 +167,7 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px', fontWeight: 600 }}>
                       <span>{formatCategory(b.category)}</span>
                       <span>
-                        ${b.spentAmount.toLocaleString()} / ${b.allocatedAmount.toLocaleString()} ({ratio.toFixed(1)}%)
+                        {formatINR(b.spentAmount)} / {formatINR(b.allocatedAmount)} ({ratio.toFixed(1)}%)
                       </span>
                     </div>
                     {/* Visual Progress Bar */}
@@ -221,7 +222,7 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
                       </span>
                     )}
                     <span style={{ fontWeight: 700, color: 'var(--primary-light)' }}>
-                      ${exp.amount.toLocaleString()}
+                      {formatINR(exp.amount)}
                     </span>
                   </div>
                 </div>
@@ -260,12 +261,12 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
                     <option value="materials">Materials</option>
                     <option value="equipment">Equipment</option>
                     <option value="labor">Labor</option>
-                    <option value="other">Other</option>
+                    <option value="miscellaneous">Miscellaneous</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Allocation Limit Amount ($)</label>
+                  <label className="form-label">Allocation Limit Amount (₹)</label>
                   <input
                     type="number"
                     className="form-input"
@@ -311,7 +312,7 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
                 )}
 
                 <div className="form-group">
-                  <label className="form-label">Expense Amount ($)</label>
+                  <label className="form-label">Expense Amount (₹)</label>
                   <input
                     type="number"
                     className="form-input"
@@ -333,7 +334,7 @@ const BudgetsTab = ({ projectId, isAdmin, isProjectManager }) => {
                     <option value="materials">Materials</option>
                     <option value="equipment">Equipment</option>
                     <option value="labor">Labor</option>
-                    <option value="other">Other</option>
+                    <option value="miscellaneous">Miscellaneous</option>
                   </select>
                 </div>
 

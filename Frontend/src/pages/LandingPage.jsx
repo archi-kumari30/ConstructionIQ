@@ -1,133 +1,85 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Folder,
+  FolderKanban,
+  Layers,
+  Wrench,
   ShieldAlert,
-  FileClock,
   ArrowRight,
   CheckCircle,
-  XCircle,
   Truck,
-  Layers,
-  Settings,
-  ClipboardList,
-  Menu,
-  X,
   TrendingUp,
   Activity,
-  Briefcase
+  Menu,
+  X,
+  MapPin,
+  ClipboardCheck,
+  Award,
+  Users2,
+  Clock3,
+  ChevronDown
 } from 'lucide-react';
 
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeRole, setActiveRole] = useState('pm');
-  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Handle scroll state for navbar borders
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const roleValue = {
-    pm: {
-      title: "Project Managers",
-      description: "Keep site operations moving within safety and budget limits. Oversee complete team roster lists, review real-time activity feeds, and manage critical milestone tracking from a single workspace.",
-      bullets: [
-        "Monitor budget utilisation rates with active indicators.",
-        "Oversee and assign roles to site engineers, sub-contractors, and suppliers.",
-        "Track milestones using a live visual pipeline interface."
-      ],
-      modules: ["Projects", "Budgets & Expenses", "Milestones Pipeline"]
-    },
-    site: {
-      title: "Site Teams & Engineers",
-      description: "Log project status details directly from the construction yard. Easily create material consumption requests, request fleet machinery assets, record worker attendance, and report hazards with camera file uploads.",
-      bullets: [
-        "Request concrete, steel, and catalog items directly from the field.",
-        "Book heavy equipment assets and log operational usage details.",
-        "Report safety hazards instantly with attached evidence photos."
-      ],
-      modules: ["Material Requests", "Equipment Booking", "Safety Hazards"]
-    },
-    ops: {
-      title: "Logistics & Operations",
-      description: "Synthesize supply chains, audit inventory levels, and optimize machinery efficiency. Receive alerts when supplies drop below minimum stock limits and track delivery statuses.",
-      bullets: [
-        "Receive real-time low-stock alerts based on threshold variables.",
-        "Track carriers, expected dates, and status options for incoming logistics.",
-        "Monitor engine utilization hours and fuel consumption logs."
-      ],
-      modules: ["Inventory Status", "Deliveries Tracker", "Telemetry Logs"]
-    },
-    mgmt: {
-      title: "Executive Management",
-      description: "Access high-level operations summaries and track cross-project risk variables. Audit compiled PDF reports and access weekly AI milestone projections to drive intelligence.",
-      bullets: [
-        "Trigger Daily Report compilation PDF generation asynchronously via BullMQ.",
-        "Review predictive weekly insights compiled by background crons.",
-        "Audit unified logs and safety metrics across all active site workspaces."
-      ],
-      modules: ["Asynchronous Reports", "AI Forecasts", "Operational Audits"]
+  // Smooth scroll handler
+  const handleAnchorClick = (e, targetId) => {
+    e.preventDefault();
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, '', `#${targetId}`);
     }
   };
 
   return (
-    <div style={{ backgroundColor: '#F4F1EA', minHeight: '100vh', fontFamily: 'var(--sans)', color: '#1E252B' }}>
-      <style>{`
-        html {
-          scroll-behavior: smooth;
-        }
-      `}</style>
+    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh', fontFamily: 'var(--sans)', color: '#1A1A1A' }}>
       
-      {/* Editorial Simple Navbar */}
-      <header className={`landing-navbar ${isScrolled ? 'scrolled' : ''}`} style={{
-        height: '64px',
-        borderBottom: '1px solid #C9C5BD',
-        backgroundColor: '#F4F1EA',
+      {/* 1. Header/Navbar */}
+      <header style={{
+        height: '72px',
+        borderBottom: '1px solid #E8E5DF',
+        backgroundColor: '#FFFFFF',
         position: 'sticky',
         top: 0,
         zIndex: 1000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 40px',
-        transition: 'box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1)'
+        padding: '0 40px'
       }}>
+        {/* Logo block */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: '#1E252B' }}>
-            <div style={{ width: '4px', height: '18px', backgroundColor: '#A64B2A' }}></div>
-            <span style={{ fontWeight: 500, fontSize: '18px', fontFamily: 'var(--font-title)', letterSpacing: '0.5px' }}>CONSTRUCTIONIQ</span>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: '#1A1A1A' }}>
+            <div style={{ width: '4px', height: '18px', backgroundColor: '#C1440E' }}></div>
+            <span style={{ fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-title)', letterSpacing: '0.5px' }}>CONSTRUCTIONIQ</span>
           </Link>
 
-          <nav className="navbar-menu" style={{ display: 'flex', gap: '28px', alignItems: 'center' }}>
-            <a href="#overview" style={{ fontSize: '13.5px', fontWeight: 500, color: '#5F6870', textDecoration: 'none' }}>Product</a>
-            <a href="#showcase" style={{ fontSize: '13.5px', fontWeight: 500, color: '#5F6870', textDecoration: 'none' }}>Solutions</a>
-            <a href="#workflow" style={{ fontSize: '13.5px', fontWeight: 500, color: '#5F6870', textDecoration: 'none' }}>Features</a>
-            <a href="#roles" style={{ fontSize: '13.5px', fontWeight: 500, color: '#5F6870', textDecoration: 'none' }}>How It Works</a>
+          {/* Navigation Links */}
+          <nav style={{ display: 'flex', gap: '28px', alignItems: 'center' }} className="desktop-nav">
+            <a href="#product" onClick={(e) => handleAnchorClick(e, 'product')} style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none', transition: 'color 0.2s' }}>Product</a>
+            <a href="#solutions" onClick={(e) => handleAnchorClick(e, 'solutions')} style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none' }}>Solutions</a>
+            <a href="#features" onClick={(e) => handleAnchorClick(e, 'features')} style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none' }}>Features</a>
+            <a href="#how-it-works" onClick={(e) => handleAnchorClick(e, 'how-it-works')} style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none' }}>How It Works</a>
+            <a href="#resources" onClick={(e) => handleAnchorClick(e, 'resources')} style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none' }}>Resources</a>
           </nav>
         </div>
 
+        {/* Right CTA */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <Link to="/login" style={{ fontSize: '13.5px', fontWeight: 500, color: '#5F6870', textDecoration: 'none' }}>Sign In</Link>
-          <Link to="/login" className="btn" style={{
-            height: '38px',
-            backgroundColor: '#1E252B',
+          <Link to="/login" style={{ fontSize: '13.5px', fontWeight: 500, color: '#6B7280', textDecoration: 'none' }}>Sign In</Link>
+          <Link to="/login" className="btn btn-primary" style={{
+            height: '42px',
+            backgroundColor: '#1A1A1A',
             color: '#FFFFFF',
-            padding: '0 16px',
-            fontSize: '12.5px',
+            padding: '0 20px',
+            fontSize: '13px',
             fontWeight: 500,
-            borderRadius: '6px',
+            borderRadius: '9999px',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
             textDecoration: 'none'
           }}>
             <span>Get Started</span>
@@ -137,122 +89,152 @@ const LandingPage = () => {
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', padding: '6px' }}
-            className="mobile-menu-btn"
+            className="mobile-menu-toggle"
           >
-            {mobileMenuOpen ? <X size={20} color="#1E252B" /> : <Menu size={20} color="#1E252B" />}
+            {mobileMenuOpen ? <X size={22} color="#1A1A1A" /> : <Menu size={22} color="#1A1A1A" />}
           </button>
         </div>
       </header>
 
-      {/* Mobile Navbar menu */}
+      {/* Styles for responsiveness */}
+      <style>{`
+        @media (max-width: 1024px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .mobile-menu-toggle {
+            display: block !important;
+          }
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            text-align: center !important;
+          }
+          .hero-left {
+            padding-right: 0 !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          .hero-buttons {
+            justify-content: center;
+          }
+          .hero-visual {
+            margin-top: 40px !important;
+            margin-right: 0 !important;
+            justify-content: center;
+          }
+          .trust-logos {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px !important;
+          }
+        }
+      `}</style>
+
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div style={{
-          backgroundColor: '#F4F1EA',
-          borderBottom: '1px solid #C9C5BD',
-          padding: '16px 24px',
+          backgroundColor: '#FFFFFF',
+          borderBottom: '1px solid #E8E5DF',
+          padding: '20px 24px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '12px',
-          boxShadow: 'var(--shadow-sm)'
+          gap: '14px',
+          zIndex: 999
         }}>
-          <a href="#overview" onClick={() => setMobileMenuOpen(false)} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1E252B' }}>Product</a>
-          <a href="#showcase" onClick={() => setMobileMenuOpen(false)} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1E252B' }}>Solutions</a>
-          <a href="#workflow" onClick={() => setMobileMenuOpen(false)} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1E252B' }}>Features</a>
-          <a href="#roles" onClick={() => setMobileMenuOpen(false)} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1E252B' }}>How It Works</a>
-          <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+          <a href="#product" onClick={(e) => { handleAnchorClick(e, 'product'); setMobileMenuOpen(false); }} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1A1A1A' }}>Product</a>
+          <a href="#solutions" onClick={(e) => { handleAnchorClick(e, 'solutions'); setMobileMenuOpen(false); }} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1A1A1A' }}>Solutions</a>
+          <a href="#features" onClick={(e) => { handleAnchorClick(e, 'features'); setMobileMenuOpen(false); }} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1A1A1A' }}>Features</a>
+          <a href="#how-it-works" onClick={(e) => { handleAnchorClick(e, 'how-it-works'); setMobileMenuOpen(false); }} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1A1A1A' }}>How It Works</a>
+          <a href="#resources" onClick={(e) => { handleAnchorClick(e, 'resources'); setMobileMenuOpen(false); }} style={{ fontSize: '14px', fontWeight: 500, textDecoration: 'none', color: '#1A1A1A' }}>Resources</a>
+
+          <div style={{ borderTop: '1px solid #E8E5DF', paddingTop: '14px', display: 'flex', gap: '10px' }}>
             <Link to="/login" className="btn btn-secondary" style={{ flex: 1, height: '40px', justifyContent: 'center' }} onClick={() => setMobileMenuOpen(false)}>Sign In</Link>
-            <Link to="/login" className="btn btn-primary" style={{ flex: 1, height: '40px', justifyContent: 'center', backgroundColor: '#1E252B' }} onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
+            <Link to="/login" className="btn btn-primary" style={{ flex: 1, height: '40px', justifyContent: 'center', backgroundColor: '#1A1A1A' }} onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
           </div>
         </div>
       )}
 
-      {/* Asymmetrical Off-Center Hero Section */}
+      {/* 2. Hero Section */}
       <section style={{
-        backgroundColor: '#F4F1EA',
-        color: '#1E252B',
         position: 'relative',
         overflow: 'hidden',
-        padding: '120px 24px 100px 24px',
-        borderBottom: '1px solid #C9C5BD'
+        padding: '80px 40px 100px 40px',
+        borderBottom: '1px solid #E8E5DF'
       }}>
-        {/* Subtle grid background */}
+        {/* technical grid line layer */}
         <div style={{
           position: 'absolute',
           top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'linear-gradient(rgba(23, 37, 43, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 37, 43, 0.015) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(193, 68, 14, 0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(193, 68, 14, 0.012) 1px, transparent 1px)',
           backgroundSize: '40px 40px',
-          maskImage: 'radial-gradient(ellipse at center, black, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 80%)',
+          maskImage: 'radial-gradient(ellipse at center, black, transparent 85%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 85%)',
           pointerEvents: 'none',
           zIndex: 1
         }}></div>
 
-        <div className="landing-container" style={{ position: 'relative', zIndex: 10 }}>
-          {/* Asymmetrical 42% / 58% split composition */}
-          <div className="landing-hero-split" style={{ gridTemplateColumns: '4.2fr 5.8fr', gap: '48px', alignItems: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+          <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '4.8fr 5.2fr', gap: '48px', alignItems: 'center' }}>
             
-            {/* Hero Left Content */}
-            <div className="animate-fade-slide-up" style={{ textAlign: 'left', paddingRight: '12px' }}>
+            {/* Left Column Content */}
+            <div className="hero-left" style={{ textAlign: 'left', paddingRight: '20px' }}>
               <div style={{
                 fontSize: '11px',
-                fontWeight: 500,
-                color: '#A64B2A',
+                fontWeight: 650,
+                color: '#C1440E',
                 letterSpacing: '1.5px',
                 textTransform: 'uppercase',
-                fontFamily: 'var(--sans)',
-                marginBottom: '24px'
+                marginBottom: '20px'
               }}>
                 CONSTRUCTION OPERATIONS PLATFORM
               </div>
 
-              {/* Bold cover headline with tight line-height */}
               <h1 style={{
                 fontFamily: 'var(--font-title)',
-                fontSize: 'clamp(60px, 7vw, 78px)',
-                fontWeight: 500,
-                lineHeight: 0.94,
+                fontSize: 'clamp(44px, 5.5vw, 68px)',
+                fontWeight: 800,
+                lineHeight: 1,
                 letterSpacing: '-0.03em',
                 marginBottom: '24px',
-                color: '#1E252B'
+                color: '#1A1A1A'
               }}>
                 Build with clarity.<br />
-                Manage with confidence.
+                Manage with <span style={{ color: '#C1440E' }}>confidence.</span>
               </h1>
 
               <p style={{
-                fontFamily: 'var(--sans)',
-                fontSize: '15px',
+                fontSize: '16px',
                 lineHeight: 1.6,
-                color: '#5F6870',
+                color: '#6B7280',
                 marginBottom: '36px',
-                maxWidth: '440px',
-                fontWeight: 400
+                maxWidth: '480px'
               }}>
                 ConstructionIQ connects projects, materials, equipment, deliveries and site operations in one connected workspace.
               </p>
 
-              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+              <div className="hero-buttons" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
                 <Link to="/login" className="btn btn-primary" style={{
-                  height: '46px',
-                  backgroundColor: '#1E252B',
+                  height: '48px',
+                  backgroundColor: '#1A1A1A',
                   color: '#FFFFFF',
                   padding: '0 24px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  borderRadius: '6px',
+                  fontSize: '13.5px',
+                  fontWeight: 600,
+                  borderRadius: '9999px',
                   textDecoration: 'none'
                 }}>
                   Get Started →
                 </Link>
-                <a href="#overview" className="btn btn-secondary" style={{
-                  height: '46px',
+                <a href="#features" className="btn btn-secondary" style={{
+                  height: '48px',
                   backgroundColor: 'transparent',
-                  color: '#1E252B',
-                  borderColor: '#1E252B',
+                  color: '#1A1A1A',
+                  borderColor: '#1A1A1A',
                   padding: '0 24px',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  borderRadius: '6px',
+                  fontSize: '13.5px',
+                  fontWeight: 600,
+                  borderRadius: '9999px',
                   textDecoration: 'none'
                 }}>
                   Explore Platform
@@ -260,79 +242,107 @@ const LandingPage = () => {
               </div>
             </div>
 
-            {/* Hero Right: Project board mockup overlaying blueprint guidelines */}
-            <div className="animate-fade-slide-up seq-1" style={{ position: 'relative', marginTop: '-20px', marginRight: '-20px' }}>
+            {/* Right Column: Architectural Drawing + Project Card overlay */}
+            <div className="hero-visual" style={{ position: 'relative', display: 'flex', justifyContent: 'flex-end', height: '420px', minWidth: '320px' }}>
               
-              {/* Asymmetrical Blueprint measurements backdrop */}
+              {/* Fine line architectural sketch illustration */}
               <div style={{
                 position: 'absolute',
-                top: '-40px', left: '-30px', right: '20px', bottom: '20px',
-                border: '1px dashed rgba(23, 35, 45, 0.1)',
-                pointerEvents: 'none',
-                zIndex: 1
+                top: '20px',
+                left: '20px',
+                width: '80%',
+                height: '90%',
+                opacity: 0.25,
+                zIndex: 1,
+                pointerEvents: 'none'
               }}>
-                <span style={{ position: 'absolute', top: '6px', left: '8px', fontSize: '9px', color: '#5F6870', opacity: 0.6, fontFamily: 'var(--sans)', fontWeight: 400 }}>A-102 // GRID B4</span>
-                <span style={{ position: 'absolute', bottom: '6px', right: '8px', fontSize: '9px', color: '#5F6870', opacity: 0.6, fontFamily: 'var(--sans)', fontWeight: 400 }}>SCALE 1:100 // NORTH // REV 04</span>
+                <svg viewBox="0 0 400 350" width="100%" height="100%" fill="none" stroke="#C1440E" strokeWidth="0.8">
+                  {/* Building skeleton grids */}
+                  <line x1="50" y1="320" x2="350" y2="320" strokeWidth="1.5" />
+                  <rect x="120" y="80" width="160" height="240" strokeWidth="0.8" strokeDasharray="3 3" />
+                  <line x1="160" y1="80" x2="160" y2="320" />
+                  <line x1="200" y1="80" x2="200" y2="320" />
+                  <line x1="240" y1="80" x2="240" y2="320" />
+                  <line x1="120" y1="120" x2="280" y2="120" />
+                  <line x1="120" y1="160" x2="280" y2="160" />
+                  <line x1="120" y1="200" x2="280" y2="200" />
+                  <line x1="120" y1="240" x2="280" y2="240" />
+                  <line x1="120" y1="280" x2="280" y2="280" />
+
+                  {/* Crane vector */}
+                  <line x1="70" y1="320" x2="70" y2="40" strokeWidth="1.2" />
+                  <line x1="70" y1="40" x2="320" y2="40" strokeWidth="1.2" />
+                  <line x1="70" y1="40" x2="50" y2="60" />
+                  <line x1="70" y1="120" x2="10" y2="40" strokeDasharray="2 2" />
+                  
+                  {/* Crane diagonal supports */}
+                  {Array.from({ length: 10 }).map((_, idx) => (
+                    <line key={idx} x1={70 + idx * 25} y1="40" x2={70 + (idx + 1) * 25} y2="55" strokeWidth="0.5" />
+                  ))}
+                  {/* Pulley block drop lines */}
+                  <line x1="260" y1="40" x2="260" y2="150" strokeDasharray="2 1" />
+                  <rect x="254" y="150" width="12" height="10" />
+                  <path d="M 260 160 L 260 180 L 255 180" />
+                </svg>
               </div>
 
-              {/* Prominent project control board */}
+              {/* Floating Hero Project Card CT-024 */}
               <div style={{
-                border: '1px solid #C9C5BD',
-                borderRadius: '6px',
-                backgroundColor: '#FFFFFF',
-                padding: '28px',
-                color: '#1E252B',
-                fontFamily: 'var(--sans)',
-                boxShadow: '0 12px 30px rgba(30, 37, 43, 0.04)',
-                textAlign: 'left',
                 position: 'relative',
-                zIndex: 10
+                zIndex: 10,
+                width: '380px',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E8E5DF',
+                borderRadius: '8px',
+                padding: '24px',
+                alignSelf: 'center',
+                boxShadow: '0 12px 30px rgba(193, 68, 14, 0.05)',
+                textAlign: 'left'
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', borderBottom: '1px solid #D9D9D4', paddingBottom: '14px', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E8E5DF', paddingBottom: '12px', marginBottom: '16px' }}>
                   <div>
-                    <span style={{ fontSize: '9px', color: '#5F6870', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', fontWeight: 500 }}>PROJECT</span>
-                    <h3 style={{ fontSize: '22px', color: '#1E252B', margin: '2px 0 0 0', fontWeight: 500, fontFamily: 'var(--font-title)' }}>CENTRAL TOWER</h3>
+                    <span style={{ fontSize: '9px', fontWeight: 650, color: '#6B7280', letterSpacing: '0.5px' }}>PROJECT</span>
+                    <h3 style={{ fontSize: '18px', fontWeight: 700, margin: 0, fontFamily: 'var(--font-title)', color: '#1A1A1A' }}>CENTRAL TOWER</h3>
                   </div>
-                  <span style={{ fontSize: '10px', fontWeight: 500, color: '#A64B2A', border: '1px solid #A64B2A', padding: '2px 6px', borderRadius: '4px' }}>CT-024</span>
+                  <span style={{ fontSize: '10px', color: '#C1440E', border: '1px solid #C1440E', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>CT-024</span>
                 </div>
 
-                {/* Progress bar visual */}
-                <div style={{ marginBottom: '24px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: 500, marginBottom: '6px' }}>
-                    <span>STATUS: ON TRACK</span>
-                    <span style={{ fontFamily: 'var(--font-title)', fontSize: '15px' }}>72%</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6B7280', marginBottom: '6px', fontWeight: 500 }}>
+                  <span>STATUS: <strong style={{ color: '#16A34A' }}>ON TRACK</strong></span>
+                  <span>72%</span>
+                </div>
+
+                {/* Progress bar */}
+                <div style={{ width: '100%', height: '5px', backgroundColor: '#FAF7F2', overflow: 'hidden', borderRadius: '9999px', marginBottom: '24px' }}>
+                  <div style={{ width: '72%', height: '100%', backgroundColor: '#C1440E' }}></div>
+                </div>
+
+                {/* 4 Stats Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                  <div>
+                    <span style={{ fontSize: '9px', color: '#6B7280', fontWeight: 650, letterSpacing: '0.5px', display: 'block' }}>MATERIALS</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A', display: 'block', margin: '2px 0' }}>03</span>
+                    <span style={{ fontSize: '11px', color: '#DC2626', fontWeight: 500 }}>Low Stock</span>
                   </div>
-                  <div style={{ width: '100%', height: '6px', backgroundColor: '#F4F1EA', borderRadius: '3px', overflow: 'hidden' }}>
-                    <div className="animate-progress" style={{ width: '72%', height: '100%', backgroundColor: '#1E252B' }}></div>
+                  <div>
+                    <span style={{ fontSize: '9px', color: '#6B7280', fontWeight: 650, letterSpacing: '0.5px', display: 'block' }}>EQUIPMENT</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A', display: 'block', margin: '2px 0' }}>08</span>
+                    <span style={{ fontSize: '11px', color: '#16A34A', fontWeight: 500 }}>Active</span>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '9px', color: '#6B7280', fontWeight: 650, letterSpacing: '0.5px', display: 'block' }}>DELIVERIES</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A', display: 'block', margin: '2px 0' }}>14</span>
+                    <span style={{ fontSize: '11px', color: '#6B7280', fontWeight: 500 }}>This Week</span>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '9px', color: '#6B7280', fontWeight: 650, letterSpacing: '0.5px', display: 'block' }}>SAFETY</span>
+                    <span style={{ fontSize: '20px', fontWeight: 700, color: '#1A1A1A', display: 'block', margin: '2px 0' }}>02</span>
+                    <span style={{ fontSize: '11px', color: '#D97706', fontWeight: 500 }}>Open Incidents</span>
                   </div>
                 </div>
 
-                {/* Details layout */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', borderTop: '1px solid #D9D9D4', paddingTop: '20px' }}>
-                  <div>
-                    <span style={{ fontSize: '9px', color: '#5F6870', textTransform: 'uppercase', display: 'block', fontWeight: 500 }}>MATERIALS</span>
-                    <span style={{ fontSize: '20px', fontWeight: 500, color: '#C62828', fontFamily: 'var(--font-title)' }}>03</span>
-                    <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', fontWeight: 400 }}>LOW STOCK</span>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '9px', color: '#5F6870', textTransform: 'uppercase', display: 'block', fontWeight: 500 }}>EQUIPMENT</span>
-                    <span style={{ fontSize: '20px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>08</span>
-                    <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', fontWeight: 400 }}>ACTIVE</span>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '9px', color: '#5F6870', textTransform: 'uppercase', display: 'block', fontWeight: 500 }}>DELIVERIES</span>
-                    <span style={{ fontSize: '20px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>14</span>
-                    <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', fontWeight: 400 }}>THIS WEEK</span>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '9px', color: '#5F6870', textTransform: 'uppercase', display: 'block', fontWeight: 500 }}>SAFETY</span>
-                    <span style={{ fontSize: '20px', fontWeight: 500, color: '#C62828', fontFamily: 'var(--font-title)' }}>02</span>
-                    <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', fontWeight: 400 }}>OPEN INCIDENTS</span>
-                  </div>
-                </div>
-
-                <div style={{ borderTop: '1px solid #D9D9D4', paddingTop: '14px', marginTop: '20px', fontSize: '9px', color: '#5F6870', textAlign: 'right', fontWeight: 400 }}>
-                  LAST UPDATED: 08:42 AM • 18 Aug 2026
+                <div style={{ borderTop: '1px solid #E8E5DF', paddingTop: '12px', fontSize: '9px', color: '#6B7280', fontWeight: 500, letterSpacing: '0.5px' }}>
+                  LAST UPDATED: 08:42 AM · 18 AUG 2026
                 </div>
               </div>
             </div>
@@ -341,624 +351,331 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* SECTION 01: Control Layer overview */}
-      <section id="overview" className="landing-sec-light" style={{ backgroundColor: '#E9E5DD', borderBottom: '1px solid #C9C5BD', padding: '100px 24px' }}>
-        <div className="landing-container">
-          <div className="landing-hero-split" style={{ gridTemplateColumns: '0.8fr 1.2fr', alignItems: 'start' }}>
-            <div style={{ textAlign: 'left' }}>
-              <span className="section-label" style={{ color: '#A64B2A', fontFamily: 'var(--sans)', fontWeight: 500, fontSize: '11px', letterSpacing: '1px' }}>FROM DISCONNECTED TO FULLY CONNECTED</span>
-              <h2 className="section-title" style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: '#1E252B', marginBottom: '16px', marginTop: '8px', fontWeight: 500 }}>Build with absolute control.</h2>
-              <p style={{ color: '#5F6870', fontSize: '15px', lineHeight: 1.6, fontWeight: 400 }}>ConstructionIQ consolidates budgets, material workflows, equipment dispatch, and safety hazards into one connected workspace.</p>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }} className="dashboard-main-grid">
-              {/* Traditional */}
-              <div style={{ border: '1px solid #C9C5BD', padding: '30px', borderRadius: '6px', backgroundColor: '#FFFFFF' }}>
-                <h3 style={{ fontSize: '15px', color: '#C62828', fontFamily: 'var(--font-title)', fontWeight: 500, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <XCircle size={16} />
-                  <span>TRADITIONAL WAY</span>
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px', color: '#5F6870', fontWeight: 400 }}>
-                  <div>• Scattered spreadsheets</div>
-                  <div>• Delayed information updates</div>
-                  <div>• Limited budget visibility</div>
-                  <div>• Communication gap delays</div>
-                  <div>• Costly rework runs</div>
-                </div>
-              </div>
-
-              {/* ConstructionIQ */}
-              <div style={{ border: '1px solid #C9C5BD', padding: '30px', borderRadius: '6px', backgroundColor: '#FFFFFF' }}>
-                <h3 style={{ fontSize: '15px', color: '#0A4174', fontFamily: 'var(--font-title)', fontWeight: 500, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CheckCircle size={16} />
-                  <span>WITH CONSTRUCTIONIQ</span>
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px', color: '#1E252B', fontWeight: 400 }}>
-                  <div>• Real-time project data</div>
-                  <div>• Complete pipeline visibility</div>
-                  <div>• Connected operations</div>
-                  <div>• Clear team communications</div>
-                  <div>• Smarter operational decisions</div>
-                </div>
-              </div>
-            </div>
+      {/* 3. Trust Bar */}
+      <section style={{ padding: '36px 40px', backgroundColor: '#FFFFFF', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ fontSize: '10px', color: '#6B7280', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '24px', textAlign: 'center' }}>
+            TRUSTED BY CONSTRUCTION LEADERS
           </div>
-        </div>
-      </section>
-
-      {/* SECTION 02: Material Workflow */}
-      <section id="workflow" className="landing-sec-white" style={{ borderBottom: '1px solid #C9C5BD', padding: '100px 24px' }}>
-        <div className="landing-container" style={{ textAlign: 'center' }}>
-          <span className="section-label" style={{ fontFamily: 'var(--sans)', fontWeight: 500, fontSize: '11px', letterSpacing: '1px', color: '#A64B2A' }}>SECTION 02 // LOGISTICS</span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: '#1E252B', marginBottom: '16px', fontWeight: 500 }}>From request to inventory</h2>
-          <p className="section-desc" style={{ fontWeight: 400 }}>Follow material request workflows from the field to inventory replenishment updates.</p>
-
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '12px',
-            flexWrap: 'wrap',
-            maxWidth: '900px',
-            margin: '0 auto',
-            position: 'relative',
-            padding: '20px 0'
-          }}>
-            {/* Connecting rust-colored line */}
-            <div style={{
-              position: 'absolute',
-              top: '50%', left: '10%', right: '10%',
-              height: '1px', backgroundColor: '#A64B2A',
-              zIndex: 1
-            }}></div>
-
-            <div style={{ border: '1px solid #C9C5BD', padding: '16px', borderRadius: '8px', backgroundColor: '#FFFFFF', minWidth: '130px', position: 'relative', zIndex: 10 }}>
-              <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', marginBottom: '4px', fontWeight: 500 }}>01 / STAGE</span>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>Material Request</span>
-            </div>
-            <div style={{ border: '1px solid #C9C5BD', padding: '16px', borderRadius: '8px', backgroundColor: '#FFFFFF', minWidth: '130px', position: 'relative', zIndex: 10 }}>
-              <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', marginBottom: '4px', fontWeight: 500 }}>02 / STAGE</span>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>Approval Loop</span>
-            </div>
-            <div style={{ border: '1px solid #C9C5BD', padding: '16px', borderRadius: '8px', backgroundColor: '#FFFFFF', minWidth: '130px', position: 'relative', zIndex: 10 }}>
-              <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', marginBottom: '4px', fontWeight: 500 }}>03 / STAGE</span>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>Supplier Sync</span>
-            </div>
-            <div style={{ border: '1px solid #C9C5BD', padding: '16px', borderRadius: '8px', backgroundColor: '#FFFFFF', minWidth: '130px', position: 'relative', zIndex: 10 }}>
-              <span style={{ fontSize: '10px', color: '#5F6870', display: 'block', marginBottom: '4px', fontWeight: 500 }}>04 / STAGE</span>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>Carrier Delivery</span>
-            </div>
-            <div style={{ border: '1px solid #C9C5BD', padding: '16px', borderRadius: '8px', backgroundColor: '#ECEBE6', minWidth: '130px', position: 'relative', zIndex: 10 }}>
-              <span style={{ fontSize: '10px', color: '#A64B2A', display: 'block', marginBottom: '4px', fontWeight: 500 }}>05 / STAGE</span>
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#A64B2A', fontFamily: 'var(--font-title)' }}>Stock Balance</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 03: Product Showcase */}
-      <section id="showcase" className="landing-sec-dark" style={{ borderBottom: '1px solid #1E252B', backgroundColor: '#1E252B', color: '#FFFFFF', padding: '100px 24px' }}>
-        <div className="landing-container" style={{ textAlign: 'center' }}>
-          <span className="section-label" style={{ fontFamily: 'var(--sans)', color: '#A64B2A', fontWeight: 500, fontSize: '11px', letterSpacing: '1px' }}>SECTION 03 // INTERFACE</span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-title)', color: '#FFFFFF', fontSize: '38px', marginBottom: '16px', fontWeight: 500 }}>Everything under control.</h2>
-          <p className="section-desc" style={{ color: '#BDD8E9', fontWeight: 400 }}>One connected workspace for construction operations.</p>
-
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: '12px',
-            border: '1px solid #C9C5BD',
-            boxShadow: 'var(--shadow-md)',
-            overflow: 'hidden',
-            textAlign: 'left',
-            color: '#1E252B',
-            maxWidth: '1000px',
-            margin: '0 auto'
-          }}>
-            {/* Showcased Mock Dashboard header */}
-            <div style={{
-              backgroundColor: '#1E252B',
-              padding: '16px 24px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: '1px solid rgba(255,255,255,0.08)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-                <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px', fontFamily: 'var(--font-title)' }}>ConstructionIQ Workspace</span>
-                <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: '#BDD8E9', fontFamily: 'var(--font-title)', fontWeight: 500 }} className="navbar-menu">
-                  <span>Dashboard</span>
-                  <span>Projects</span>
-                  <span>Materials</span>
-                  <span>Suppliers</span>
-                </div>
-              </div>
-              <span style={{ fontSize: '11px', color: '#BDD8E9', fontWeight: 500 }}>Connected</span>
-            </div>
-
-            {/* Showcased Mock Dashboard body */}
-            <div style={{ padding: '30px', backgroundColor: '#F4F1EA', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 500, color: '#1E252B', margin: 0, fontFamily: 'var(--font-title)' }}>Skyline Tower — Operations Summary</h3>
-                  <p style={{ fontSize: '12px', color: '#5F6870', margin: '3px 0 0 0', fontWeight: 400 }}>Real-time telemetry tracking and warehousing status alert monitors.</p>
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <span className="badge badge-info" style={{ textTransform: 'uppercase', fontWeight: 500 }}>Active phase</span>
-                  <span className="badge badge-success" style={{ textTransform: 'uppercase', backgroundColor: '#E2F0D9', color: '#2E7D32', fontWeight: 500 }}>On Track</span>
-                </div>
-              </div>
-
-              {/* Progress bars & activities */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '20px' }} className="dashboard-main-grid">
-                <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #C9C5BD', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <h4 style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-title)' }}>
-                    <TrendingUp size={16} color="#A64B2A" />
-                    <span>Project Budget Utilisation</span>
-                  </h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px', fontWeight: 500 }}>
-                        <span>Skyline Tower — Phase 2 Block B</span>
-                        <span>80% Spent</span>
-                      </div>
-                      <div style={{ width: '100%', height: '8px', backgroundColor: '#ECEBE6', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{ width: '80%', height: '100%', backgroundColor: '#1E252B' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ backgroundColor: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid #C9C5BD', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <h4 style={{ fontSize: '13px', fontWeight: 500, color: '#1E252B', display: 'flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-title)' }}>
-                    <Activity size={16} color="#A64B2A" />
-                    <span>Live Operations Stream</span>
-                  </h4>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '11px', color: '#5F6870', fontWeight: 400 }}>
-                    <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid #ECEBE6', paddingBottom: '6px' }}>
-                      <span style={{ color: '#2E7D32' }}>✓</span>
-                      <span>Cement OPC (500 bags) marked <strong>Delivered</strong></span>
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <span style={{ color: '#EF6C00' }}>⚠</span>
-                      <span>Incident log created: <strong>Crane engine warning</strong></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 03.5: B2B Search Catalog Preview */}
-      <section id="catalog-preview" className="landing-sec-white" style={{ borderBottom: '1px solid #C9C5BD', padding: '100px 24px', backgroundColor: '#FFFFFF' }}>
-        <div className="landing-container" style={{ maxWidth: '900px', textAlign: 'center' }}>
-          <span className="section-label" style={{ fontFamily: 'var(--sans)', fontWeight: 500, fontSize: '11px', color: '#A64B2A', letterSpacing: '1.5px', textTransform: 'uppercase' }}>CONNECTED SUPPLY CATALOG & PROCUREMENT</span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: '#1E252B', marginTop: '12px', marginBottom: '16px', fontWeight: 500 }}>
-            Unified construction search & operations
-          </h2>
-          <p className="section-desc" style={{ fontWeight: 400, color: '#5F6870', maxWidth: '600px', margin: '0 auto 40px auto', fontSize: '14px', lineHeight: 1.6 }}>
-            ConstructionIQ functions as both a project site operations monitor and an industrial procurement hub.
-          </p>
-
-          {/* Visual Procurement Flow chart */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            maxWidth: '760px',
-            margin: '0 auto 40px auto',
-            position: 'relative',
-            fontSize: '11px',
-            fontFamily: 'var(--font-title)',
-            color: '#5F6870',
-            letterSpacing: '0.5px'
-          }}>
-            {/* Connecting line */}
-            <div style={{ position: 'absolute', top: '9px', left: '40px', right: '40px', height: '1px', backgroundColor: '#C9C5BD', zIndex: 1 }}></div>
-
-            {[
-              { label: 'SEARCH MATERIAL OR EQUIPMENT', step: '01' },
-              { label: 'MATCH RESULTS', step: '02' },
-              { label: 'COMPARE SUPPLIERS', step: '03' },
-              { label: 'CHECK PRICE / AVAILABILITY', step: '04' },
-              { label: 'REQUEST OR BOOK', step: '05' }
-            ].map((node, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2, backgroundColor: '#FFFFFF', padding: '0 8px', width: '130px' }}>
-                <div style={{
-                  width: '18px',
-                  height: '18px',
-                  borderRadius: '50%',
-                  border: '1.5px solid #A64B2A',
-                  backgroundColor: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '9px',
-                  fontWeight: 600,
-                  color: '#A64B2A',
-                  marginBottom: '6px'
-                }}>{node.step}</div>
-                <div style={{ textAlign: 'center', fontWeight: 500, color: '#1E252B', fontSize: '9px', lineHeight: 1.2 }}>{node.label}</div>
-              </div>
+          <div className="trust-logos" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: 0.5, gap: '16px' }}>
+            {['BuildRight', 'Skyline', 'UrbanGrid', 'ConstructCo', 'InfraOne'].map((mark, i) => (
+              <span key={i} style={{ fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-title)', letterSpacing: '0.5px', color: '#1A1A1A' }}>
+                ▰ {mark}
+              </span>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* Search Simulation Container */}
-          <div style={{
-            maxWidth: '680px',
-            margin: '0 auto',
-            border: '1px solid #C9C5BD',
-            borderRadius: '6px',
-            backgroundColor: '#F4F1EA',
-            overflow: 'hidden',
-            boxShadow: 'var(--shadow-md)',
-            textAlign: 'left'
-          }}>
-            {/* Mock Search Bar Header */}
-            <div style={{
-              padding: '16px 20px',
-              borderBottom: '1px solid #C9C5BD',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              backgroundColor: '#FFFFFF'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', flex: 1, position: 'relative' }}>
-                <span style={{ position: 'absolute', left: '12px', color: '#5F6870', fontSize: '14px' }}>🔍</span>
-                <input
-                  type="text"
-                  readOnly
-                  value="20T Excavator"
-                  style={{
-                    width: '100%',
-                    padding: '8px 12px 8px 36px',
-                    fontSize: '13px',
-                    border: '1px solid #C9C5BD',
-                    borderRadius: '6px',
-                    backgroundColor: '#F4F1EA',
-                    color: '#1E252B',
-                    outline: 'none',
-                    fontFamily: 'var(--sans)'
-                  }}
-                />
+      {/* Product Section */}
+      <section id="product" style={{ padding: '80px 40px', backgroundColor: '#FFFFFF', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#C1440E', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            PLATFORM OVERVIEW
+          </div>
+          <h2 style={{ fontSize: '36px', fontWeight: 850, fontFamily: 'var(--font-title)', color: '#1A1A1A', marginBottom: '16px' }}>
+            Streamline Infrastructure Workflows.
+          </h2>
+          <p style={{ fontSize: '15px', color: '#6B7280', lineHeight: 1.7, maxWidth: '640px', margin: '0 auto 48px auto' }}>
+            ConstructionIQ connects projects, materials, equipment, deliveries and site operations in one connected workspace.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', textAlign: 'left' }}>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Project Management</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Establish project metadata, verify location coordinates, assign roles to site engineer and subcontractor rosters, and track progress timelines.</p>
+            </div>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Materials & Inventory</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Oversee warehouse stock balances, set automated low-stock warnings, and verify material usage across multiple project locations.</p>
+            </div>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Equipment</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Maintain a master catalog of heavy machinery fleet, track usage logs, and manage mechanical maintenance schedules.</p>
+            </div>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Deliveries</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Coordinate incoming supplier carriers, expected timelines, delivery verification logs, and item receipt forms.</p>
+            </div>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Site Operations</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Coordinate shift logs, attendance registers, and group task lists to keep operating crews aligned with project progress goals.</p>
+            </div>
+            <div style={{ padding: '24px', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '8px', color: '#1A1A1A' }}>Safety & Reporting</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Log site hazards with attached evidence photos, track severity ratings, and run background processes to compile Daily Site Reports into PDF.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Features Section */}
+      <section id="features" style={{ padding: '80px 40px', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#C1440E', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            PRODUCT CAPABILITIES
+          </div>
+          <h2 style={{ fontSize: '36px', fontWeight: 850, fontFamily: 'var(--font-title)', color: '#1A1A1A', marginBottom: '48px' }}>
+            Everything You Need. <span style={{ color: '#C1440E' }}>All in One Place.</span>
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' }}>
+            
+            {/* Card 1 */}
+            <div id="feat-pm" className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', transition: 'transform 0.2s', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <FolderKanban size={20} />
               </div>
-              <Link to="/login" className="btn btn-primary" style={{ height: '34px', fontSize: '12px', padding: '0 16px', backgroundColor: '#1E252B', color: '#FFFFFF', textDecoration: 'none', display: 'flex', alignItems: 'center', borderRadius: '6px', fontWeight: 500 }}>
-                Search
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Project Management</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Track progress, milestones and budgets in real-time.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
               </Link>
             </div>
 
-            {/* Mock Search Results list */}
-            <div style={{ padding: '8px 0', backgroundColor: '#FFFFFF' }}>
-              
-              {/* Row 1 */}
-              <div style={{
-                padding: '16px 20px',
-                borderBottom: '1px solid #ECEBE6',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 500, fontSize: '14px', color: '#1E252B' }}>20T Hydraulic Excavator (CAT 320D)</span>
-                    <span style={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', color: '#2E7D32', fontSize: '9px', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>Available</span>
-                  </div>
-                  <span style={{ fontSize: '11.5px', color: '#5F6870', display: 'block', marginTop: '4px' }}>Rental Supplier: National Equipment Rentals • Region: Vadodara</span>
-                </div>
-                <Link to="/login" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#A64B2A',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <span>Request Booking</span>
-                  <span>➔</span>
-                </Link>
+            {/* Card 2 */}
+            <div id="feat-materials" className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <Layers size={20} />
               </div>
-
-              {/* Row 2 */}
-              <div style={{
-                padding: '16px 20px',
-                borderBottom: '1px solid #ECEBE6',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 500, fontSize: '14px', color: '#1E252B' }}>OPC 53 Cement Bags</span>
-                    <span style={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', color: '#2E7D32', fontSize: '9px', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>In Stock</span>
-                  </div>
-                  <span style={{ fontSize: '11.5px', color: '#5F6870', display: 'block', marginTop: '4px' }}>Supplier: Apex Building Supplies • Region: Vadodara</span>
-                </div>
-                <Link to="/login" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#A64B2A',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <span>Add to Request</span>
-                  <span>➔</span>
-                </Link>
-              </div>
-
-              {/* Row 3 */}
-              <div style={{
-                padding: '16px 20px',
-                borderBottom: '1px solid #ECEBE6',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 500, fontSize: '14px', color: '#1E252B' }}>TMT Structural Steel Bars</span>
-                    <span style={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', color: '#2E7D32', fontSize: '9px', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>Available</span>
-                  </div>
-                  <span style={{ fontSize: '11.5px', color: '#5F6870', display: 'block', marginTop: '4px' }}>Supplier: Gujarat Steel Corp • Region: Ahmedabad</span>
-                </div>
-                <Link to="/login" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#A64B2A',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <span>Compare Suppliers</span>
-                  <span>➔</span>
-                </Link>
-              </div>
-
-              {/* Row 4 */}
-              <div style={{
-                padding: '16px 20px',
-                borderBottom: '1px solid #ECEBE6',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 500, fontSize: '14px', color: '#1E252B' }}>Putmeister M36 Concrete Boom Pump</span>
-                    <span style={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', color: '#2E7D32', fontSize: '9px', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>Available</span>
-                  </div>
-                  <span style={{ fontSize: '11.5px', color: '#5F6870', display: 'block', marginTop: '4px' }}>Supplier: Ahmedabad ReadyMix • Region: Ahmedabad</span>
-                </div>
-                <Link to="/login" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#A64B2A',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <span>Request Booking</span>
-                  <span>➔</span>
-                </Link>
-              </div>
-
-              {/* Row 5 */}
-              <div style={{
-                padding: '16px 20px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 500, fontSize: '14px', color: '#1E252B' }}>Safety Equipment PPE Kit Class I</span>
-                    <span style={{ backgroundColor: 'rgba(46, 125, 50, 0.1)', color: '#2E7D32', fontSize: '9px', fontWeight: 600, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>In Stock</span>
-                  </div>
-                  <span style={{ fontSize: '11.5px', color: '#5F6870', display: 'block', marginTop: '4px' }}>Supplier: SafeWork India • Region: Surat</span>
-                </div>
-                <Link to="/login" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#A64B2A',
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <span>Add to Request</span>
-                  <span>➔</span>
-                </Link>
-              </div>
-
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Materials & Inventory</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Monitor stock levels, orders and deliveries seamlessly.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
             </div>
+
+            {/* Card 3 */}
+            <div id="feat-equipment" className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <Wrench size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Equipment Tracking</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Manage equipment, bookings and maintenance efficiently.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            {/* Card 4 */}
+            <div id="feat-site" className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <ShieldAlert size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Site Operations</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Daily logs, safety reports and team coordination in one place.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* SECTION 04: Construction Team Roles */}
-      <section id="roles" className="landing-sec-light" style={{ borderBottom: '1px solid #C9C5BD', padding: '100px 24px', backgroundColor: '#F4F1EA' }}>
-        <div className="landing-container" style={{ maxWidth: '900px', textAlign: 'center' }}>
-          <span className="section-label" style={{ fontFamily: 'var(--sans)', fontWeight: 500, fontSize: '11px', color: '#A64B2A' }}>SECTION 04 // ROLES</span>
-          <h2 className="section-title" style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: '#1E252B', marginBottom: '16px', fontWeight: 500 }}>Built for the people who keep projects moving</h2>
-          <p className="section-desc" style={{ fontWeight: 400 }}>Select your profile category to see how ConstructionIQ connects your daily operations workflow.</p>
-
-          {/* Slider track tab bar styling */}
-          <div style={{ 
-            display: 'inline-flex', 
-            gap: '24px', 
-            borderBottom: '2px solid #C9C5BD',
-            paddingBottom: '8px',
-            marginBottom: '32px',
-            width: '100%',
-            justifyContent: 'center'
-          }}>
-            {Object.keys(roleValue).map((roleKey) => (
-              <button
-                key={roleKey}
-                onClick={() => setActiveRole(roleKey)}
-                style={{
-                  padding: '8px 4px',
-                  fontSize: '14px',
-                  backgroundColor: 'transparent',
-                  color: activeRole === roleKey ? '#A64B2A' : '#5F6870',
-                  border: 'none',
-                  borderBottom: activeRole === roleKey ? '2px solid #A64B2A' : '2px solid transparent',
-                  marginBottom: '-10px',
-                  fontWeight: 500,
-                  fontFamily: 'var(--font-title)',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s cubic-bezier(0.22, 1, 0.36, 1)'
-                }}
-              >
-                {roleValue[roleKey].title}
-              </button>
-            ))}
+      {/* Solutions Section */}
+      <section id="solutions" style={{ padding: '80px 40px', backgroundColor: '#FAF7F2', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#C1440E', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            SOLUTIONS BY ROLE
           </div>
-
-          <div style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #C9C5BD',
-            borderRadius: '8px',
-            padding: '40px',
-            textAlign: 'left',
-            boxShadow: 'var(--shadow-sm)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px'
-          }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 500, color: '#1E252B', fontFamily: 'var(--font-title)' }}>{roleValue[activeRole].title}</h3>
-            <p style={{ fontSize: '14.5px', color: '#5F6870', lineHeight: 1.6, fontWeight: 400 }}>{roleValue[activeRole].description}</p>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px', marginTop: '8px' }}>
-              {roleValue[activeRole].bullets.map((bullet, idx) => (
-                <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start', fontSize: '13.5px', color: '#1E252B', fontWeight: 400 }}>
-                  <CheckCircle size={18} color="#A64B2A" style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span>{bullet}</span>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ borderTop: '1px solid #C9C5BD', paddingTop: '20px', marginTop: '10px' }}>
-              <div style={{ fontSize: '11px', fontWeight: 500, textTransform: 'uppercase', color: '#5F6870', marginBottom: '8px', fontFamily: 'var(--font-title)' }}>Assigned Modules:</div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {roleValue[activeRole].modules.map((mod, idx) => (
-                  <span key={idx} className="badge badge-info" style={{ fontSize: '11px', padding: '5px 10px', textTransform: 'none', backgroundColor: '#ECEBE6', color: '#1E252B', border: '1px solid #C9C5BD', fontWeight: 500 }}>{mod}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA Section */}
-      <section style={{
-        backgroundColor: '#A64B2A',
-        color: '#FFFFFF',
-        padding: '100px 24px',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div className="landing-container" style={{ maxWidth: '700px' }}>
-          <h2 style={{ fontSize: '38px', fontWeight: 500, color: '#FFFFFF', marginBottom: '16px', fontFamily: 'var(--font-title)' }}>
-            Build better. Operate smarter.
+          <h2 style={{ fontSize: '36px', fontWeight: 850, fontFamily: 'var(--font-title)', color: '#1A1A1A', marginBottom: '48px' }}>
+            Tailored For Infrastructure Teams.
           </h2>
-          <p style={{ fontSize: '16px', color: '#BDD8E9', marginBottom: '40px', lineHeight: 1.6, fontWeight: 400 }}>
-            Bring projects, materials, equipment and site operations together with ConstructionIQ.
-          </p>
-          <div>
-            <Link to="/login" className="btn btn-primary" style={{
-              backgroundColor: '#F4F1EA',
-              color: '#1E252B',
-              padding: '14px 36px',
-              fontSize: '14px',
-              fontWeight: 500,
-              borderRadius: '8px',
-              border: 'none',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              textDecoration: 'none'
-            }}>
-              <span>GET STARTED →</span>
-            </Link>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', textAlign: 'left' }}>
+            <div className="card" style={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#C1440E', marginBottom: '12px', borderBottom: '1px solid #FAF7F2', paddingBottom: '8px' }}>General Contractors</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Manage multiple sub-contractors, track unified billing logs, and compile auditable operations feeds in one workspace.</p>
+            </div>
+            <div className="card" style={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#C1440E', marginBottom: '12px', borderBottom: '1px solid #FAF7F2', paddingBottom: '8px' }}>Project Managers</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Track project milestones, budget utilisation rates in Indian Rupees, active hazards count, and crew tasks lists.</p>
+            </div>
+            <div className="card" style={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#C1440E', marginBottom: '12px', borderBottom: '1px solid #FAF7F2', paddingBottom: '8px' }}>Site Teams</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Log concrete pouring details, request machinery fleet bookings, report safety hazards with photos, and log shift checklists.</p>
+            </div>
+            <div className="card" style={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#C1440E', marginBottom: '12px', borderBottom: '1px solid #FAF7F2', paddingBottom: '8px' }}>Procurement Teams</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Verify supplier catalog lists, monitor warehouse stock limits, receive low-stock alerts, and coordinate carriers.</p>
+            </div>
+            <div className="card" style={{ padding: '24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '6px' }}>
+              <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#C1440E', marginBottom: '12px', borderBottom: '1px solid #FAF7F2', paddingBottom: '8px' }}>Operations Teams</h4>
+              <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.6, margin: 0 }}>Monitor engine utilization logs, fuel consumption details, daily shift logs, and worker coordination sheets.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Dark Footer */}
-      <footer style={{
-        backgroundColor: '#1E252B',
-        color: '#FFFFFF',
-        borderTop: '1px solid rgba(255,255,255,0.08)',
-        padding: '80px 40px 40px 40px'
-      }}>
-        <div className="landing-container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '48px',
-            textAlign: 'left',
-            borderBottom: '1px solid rgba(255,255,255,0.08)',
-            paddingBottom: '48px',
-            marginBottom: '32px'
-          }} className="dashboard-main-grid">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontWeight: 500, fontSize: '18px', color: '#A64B2A', fontFamily: 'var(--font-title)' }}>CONSTRUCTIONIQ</span>
+      {/* How It Works Section */}
+      <section id="how-it-works" style={{ padding: '80px 40px', backgroundColor: '#FFFFFF', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#C1440E', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            OPERATIONAL WORKFLOW
+          </div>
+          <h2 style={{ fontSize: '36px', fontWeight: 850, fontFamily: 'var(--font-title)', color: '#1A1A1A', marginBottom: '48px' }}>
+            How ConstructionIQ Works.
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '32px', textAlign: 'left' }}>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: '#C1440E', fontFamily: 'var(--font-title)' }}>01</span>
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>Create & Organize Projects</h4>
+                <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>Initialize project parameters, map coordinates, configure project team rosters, and allocate budgets.</p>
               </div>
-              <p style={{ fontSize: '13px', color: '#BDD8E9', lineHeight: 1.6, maxWidth: '240px', opacity: 0.8, fontWeight: 400 }}>
-                High-performance operational auditing and resource tracking software for commercial construction builders.
+            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: '#C1440E', fontFamily: 'var(--font-title)' }}>02</span>
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>Connect Materials & Equipment</h4>
+                <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>Establish master catalogs, record logistics balances, manage delivery timelines, and log machinery usage.</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: '#C1440E', fontFamily: 'var(--font-title)' }}>03</span>
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>Track Site Operations</h4>
+                <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>Record daily shift checklists, file hazard reports, verify team tasks, and coordinate supplier deliveries.</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <span style={{ fontSize: '24px', fontWeight: 800, color: '#C1440E', fontFamily: 'var(--font-title)' }}>04</span>
+              <div>
+                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>Make Better Decisions</h4>
+                <p style={{ fontSize: '13px', color: '#6B7280', lineHeight: 1.5, margin: 0 }}>Monitor budget utilization in real-time, compile reports, analyze insights, and prevent site hazard risks.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Resources Section */}
+      <section id="resources" style={{ padding: '80px 40px', backgroundColor: '#FAF7F2', borderBottom: '1px solid #E8E5DF' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#C1440E', fontWeight: 650, letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+            LEARNING RESOURCES
+          </div>
+          <h2 style={{ fontSize: '36px', fontWeight: 850, fontFamily: 'var(--font-title)', color: '#1A1A1A', marginBottom: '48px' }}>
+            Industry Playbooks & Guides.
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', textAlign: 'left' }}>
+            
+            {/* Card 1 */}
+            <div className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <ClipboardCheck size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Construction Operations Guide</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Understand standard procedures for daily logs, safety inspections, and subcontractor coordination on active jobsites.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            {/* Card 2 */}
+            <div className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <FolderKanban size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Project Management Guide</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                A deep dive into budgeting, scheduling milestones, and setting up role-aware user workspaces inside ConstructionIQ.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            {/* Card 3 */}
+            <div className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <Layers size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Materials & Inventory Guide</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                Best practices for tracking supplier catalogs, mitigating low stock alerts, and verifying steel & concrete deliveries.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+            {/* Card 4 */}
+            <div className="card" style={{ padding: '32px 24px', backgroundColor: '#FFFFFF', border: '1px solid #E8E5DF', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div style={{ width: '44px', height: '44px', backgroundColor: '#FDF4F0', color: '#C1440E', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                <ShieldAlert size={20} />
+              </div>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '12px' }}>Site Operations Guide</h3>
+              <p style={{ fontSize: '13.5px', color: '#6B7280', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
+                How to record incident safety hazard reports, coordinate site crews, and compile daily logs into PDF audit reports.
+              </p>
+              <Link to="/login" style={{ fontSize: '12.5px', fontWeight: 600, color: '#C1440E', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span>Learn more</span>
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{ padding: '60px 40px 40px 40px', backgroundColor: '#FAF7F2', borderTop: '1px solid #E8E5DF', fontSize: '13.5px', color: '#6B7280' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '32px', textAlign: 'left' }}>
+            <div style={{ flex: '1 1 300px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                <div style={{ width: '4px', height: '18px', backgroundColor: '#C1440E' }}></div>
+                <span style={{ fontWeight: 800, fontSize: '18px', fontFamily: 'var(--font-title)', letterSpacing: '0.5px', color: '#1A1A1A' }}>CONSTRUCTIONIQ</span>
+              </div>
+              <p style={{ lineHeight: 1.6, color: '#6B7280', margin: 0, maxWidth: '360px' }}>
+                Connected construction operations platform enabling teams to manage projects, materials, equipment, site logistics, and daily safety reporting in one workspace.
               </p>
             </div>
-            <div>
-              <h4 style={{ fontSize: '12px', fontWeight: 500, textTransform: 'uppercase', marginBottom: '20px', color: '#BDD8E9', letterSpacing: '1px', fontFamily: 'var(--font-title)' }}>Product</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
-                <span>Solutions</span>
-                <span>Features overview</span>
-                <span>Safety auditing</span>
+            
+            <div style={{ display: 'flex', gap: '48px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <span style={{ fontWeight: 700, color: '#1A1A1A', fontSize: '12px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Platform</span>
+                <a href="#product" onClick={(e) => handleAnchorClick(e, 'product')} style={{ color: '#6B7280', textDecoration: 'none' }}>Overview</a>
+                <a href="#solutions" onClick={(e) => handleAnchorClick(e, 'solutions')} style={{ color: '#6B7280', textDecoration: 'none' }}>Solutions</a>
+                <a href="#features" onClick={(e) => handleAnchorClick(e, 'features')} style={{ color: '#6B7280', textDecoration: 'none' }}>Capabilities</a>
+                <a href="#how-it-works" onClick={(e) => handleAnchorClick(e, 'how-it-works')} style={{ color: '#6B7280', textDecoration: 'none' }}>Workflow</a>
               </div>
-            </div>
-            <div>
-              <h4 style={{ fontSize: '12px', fontWeight: 500, textTransform: 'uppercase', marginBottom: '20px', color: '#BDD8E9', letterSpacing: '1px', fontFamily: 'var(--font-title)' }}>Resources</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
-                <span>Documentation</span>
-                <span>API integrations</span>
-                <span>Platform Support</span>
-              </div>
-            </div>
-            <div>
-              <h4 style={{ fontSize: '12px', fontWeight: 500, textTransform: 'uppercase', marginBottom: '20px', color: '#BDD8E9', letterSpacing: '1px', fontFamily: 'var(--font-title)' }}>Company</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 400 }}>
-                <span>About us</span>
-                <span>Privacy guidelines</span>
-                <span>Terms of service</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <span style={{ fontWeight: 700, color: '#1A1A1A', fontSize: '12px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Resources</span>
+                <a href="#resources" onClick={(e) => handleAnchorClick(e, 'resources')} style={{ color: '#6B7280', textDecoration: 'none' }}>Guides & Playbooks</a>
+                <Link to="/login" style={{ color: '#6B7280', textDecoration: 'none' }}>Sign In</Link>
+                <Link to="/login" style={{ color: '#6B7280', textDecoration: 'none' }}>Get Started</Link>
               </div>
             </div>
           </div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontSize: '12px',
-            color: 'rgba(255,255,255,0.4)',
-            flexWrap: 'wrap',
-            gap: '16px',
-            fontWeight: 400
-          }}>
-            <span>© 2026 ConstructionIQ Technologies Inc. All rights reserved.</span>
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <span>Privacy Policy</span>
-              <span>Terms of Use</span>
-            </div>
+          
+          <div style={{ borderTop: '1px solid #E8E5DF', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+            <span>&copy; {new Date().getFullYear()} ConstructionIQ. All rights reserved.</span>
+            <span style={{ color: '#A0A0A0' }}>Designed for modern infrastructure teams.</span>
           </div>
         </div>
       </footer>
+
     </div>
   );
 };

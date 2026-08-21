@@ -1,45 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;650;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
 
 html {
   scroll-behavior: smooth;
 }
 
 :root {
-  --primary: #1E252B;
-  --primary-light: #0A4174;
-  --primary-dark: #001D39;
+  --primary: #1A1A1A;
+  --primary-light: #C1440E;
+  --primary-dark: #121212;
   --steel-blue: #49769F;
   --teal-blue: #4E8EA2;
   --soft-blue: #6EA2B3;
   --light-blue: #7BBDE8;
   --pale-blue: #BDD8E9;
   --construction-stone: #C9B79C;
-  --oxide-rust: #A64B2A;
+  --oxide-rust: #C1440E;
   
-  --bg: #F4F1EA;
+  --bg: #FAF7F2;
   --surface: #FFFFFF;
-  --border: #C9C5BD;
-  --text-primary: #1E252B;
-  --text-muted: #5F6870;
+  --border: #E8E5DF;
+  --text-primary: #1A1A1A;
+  --text-muted: #6B7280;
   
-  --accent: #A64B2A;
+  --accent: #C1440E;
   --accent-text: #FFFFFF;
+  --accent-secondary: #D85A2A;
   
-  --success: #2E7D32;
-  --success-bg: rgba(46, 125, 50, 0.1);
-  --warning: #EF6C00;
-  --warning-bg: rgba(239, 108, 0, 0.1);
-  --error: #C62828;
-  --error-bg: rgba(198, 40, 40, 0.1);
+  --success: #16A34A;
+  --success-bg: rgba(22, 163, 74, 0.08);
+  --warning: #D97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  --error: #DC2626;
+  --error-bg: rgba(220, 38, 38, 0.08);
   --info: #0A4174;
-  --info-bg: rgba(10, 65, 116, 0.1);
+  --info-bg: rgba(10, 65, 116, 0.08);
   
-  --sans: 'Source Sans 3', -apple-system, sans-serif;
-  --font-title: 'Barlow Condensed', sans-serif;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
-  --shadow-premium: 0 4px 20px rgba(30, 37, 43, 0.02);
+  --sans: 'Inter', -apple-system, sans-serif;
+  --font-title: 'Manrope', sans-serif;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
+  --shadow-premium: 0 4px 20px rgba(193, 68, 14, 0.02);
 }
 
 * {

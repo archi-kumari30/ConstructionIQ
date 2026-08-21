@@ -20,7 +20,11 @@ const MilestonesTab = ({ projectId, isAdmin, isProjectManager }) => {
     try {
       setLoading(true);
       const res = await api.get(`/projects/${projectId}/milestones`);
-      setMilestones(res.data?.data?.milestones || []);
+      const list = (res.data?.data?.milestones || []).map(m => ({
+        ...m,
+        dueDate: m.targetDate || m.dueDate
+      }));
+      setMilestones(list);
     } catch (err) {
       console.error('Error fetching milestones:', err);
     } finally {
@@ -44,7 +48,7 @@ const MilestonesTab = ({ projectId, isAdmin, isProjectManager }) => {
     const payload = {
       title,
       description,
-      dueDate: new Date(dueDate),
+      targetDate: new Date(dueDate),
       status
     };
 

@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /$
+Allow: /#product
+Allow: /#solutions
+Allow: /#features
+Allow: /#how-it-works
+Allow: /#resources
+Allow: /#pricing
+Allow: /login
+Disallow: /dashboard
+Disallow: /projects
+Disallow: /materials
+Disallow: /equipment
+Disallow: /deliveries
+Disallow: /reports
+Disallow: /settings
+Disallow: /unauthorized
+
+Sitemap: https://constructioniq.com/sitemap.xml

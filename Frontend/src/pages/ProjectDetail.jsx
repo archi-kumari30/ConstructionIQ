@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
 import api from '../services/api';
+import { formatINR } from '../utils/format';
 import OverviewTab from '../components/project/OverviewTab';
 import TeamTab from '../components/project/TeamTab';
 import MilestonesTab from '../components/project/MilestonesTab';
@@ -116,7 +117,7 @@ const ProjectDetail = () => {
             <div style={{ textAlign: 'right' }}>
               <div style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Allocated Budget</div>
               <div style={{ fontWeight: 800, fontSize: '18px', color: 'var(--primary-light)', marginTop: '2px' }}>
-                ${project.budgetEstimated?.toLocaleString()}
+                {formatINR(project.budgetEstimated)}
               </div>
             </div>
             <div style={{ textAlign: 'right' }}>

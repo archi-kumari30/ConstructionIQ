@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { MapPin, Calendar, Landmark, User, Settings, Trash2, Edit2 } from 'lucide-react';
+import { formatINR } from '../../utils/format';
 
 const OverviewTab = ({ project, isAdmin, isProjectManager, onUpdate }) => {
   const navigate = useNavigate();
@@ -127,7 +128,7 @@ const OverviewTab = ({ project, isAdmin, isProjectManager, onUpdate }) => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="form-group">
-                <label className="form-label">Estimated Budget ($)</label>
+                <label className="form-label">Estimated Budget (₹)</label>
                 <input
                   type="number"
                   className="form-input"
@@ -184,7 +185,7 @@ const OverviewTab = ({ project, isAdmin, isProjectManager, onUpdate }) => {
               <Landmark size={18} color="var(--text-muted)" style={{ marginTop: '3px' }} />
               <div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>Allocated Estimated Budget</div>
-                <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--primary-light)' }}>${project.budgetEstimated?.toLocaleString()}</div>
+                <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--primary-light)' }}>{formatINR(project.budgetEstimated)}</div>
               </div>
             </div>
 

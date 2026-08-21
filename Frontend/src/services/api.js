@@ -53,14 +53,16 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+    const url = originalRequest?.url || '';
+    const isAuthUrl = url.includes('/auth/refresh-token') ||
+                      url.includes('/auth/login') ||
+                      url.includes('/auth/register');
 
     // Reject immediately if not 401, or if it's already a retry, or if it's login/register/refresh
     if (
       error.response?.status !== 401 ||
-      originalRequest._retry ||
-      originalRequest.url === '/auth/refresh-token' ||
-      originalRequest.url === '/auth/login' ||
-      originalRequest.url === '/auth/register'
+      originalRequest?._retry ||
+      isAuthUrl
     ) {
       return Promise.reject(error);
     }

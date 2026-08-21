@@ -27,6 +27,10 @@ import Suppliers from './pages/Suppliers';
 import Incidents from './pages/Incidents';
 import Reports from './pages/Reports';
 import SearchCatalog from './pages/SearchCatalog';
+import Analytics from './pages/Analytics';
+import SiteOperations from './pages/SiteOperations';
+import Calendar from './pages/Calendar';
+import Settings from './pages/Settings';
 
 // Public Landing Page and Redirect helper
 import LandingPage from './pages/LandingPage';
@@ -62,6 +66,7 @@ function App() {
               }
             >
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/analytics" element={<Analytics />} />
               <Route path="/search" element={<SearchCatalog />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/:id" element={<ProjectDetail />} />
@@ -93,7 +98,11 @@ function App() {
               {/* Suppliers, Incidents, Reports routes */}
               <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/incidents" element={<Incidents />} />
+              <Route path="/safety" element={<Incidents />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/site-operations" element={<SiteOperations />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/settings" element={<Settings />} />
 
               {/* Workers (Admins, PMs, Site Engineers, Contractors) */}
               <Route

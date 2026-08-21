@@ -166,7 +166,7 @@ const Materials = () => {
                     <td style={{ fontWeight: 600 }}>{mat.name}</td>
                     <td><span className="badge badge-info">{mat.category}</span></td>
                     <td>{mat.unit}</td>
-                    <td style={{ fontWeight: 600 }}>${mat.unitCost?.toLocaleString()}</td>
+                    <td style={{ fontWeight: 600 }}>₹{mat.unitCost?.toLocaleString()}</td>
                     {isAdmin && (
                       <td>
                         <div style={{ display: 'flex', gap: '6px' }}>
@@ -262,7 +262,7 @@ const Materials = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Standard Unit Cost ($)</label>
+                  <label className="form-label">Standard Unit Cost (₹)</label>
                   <input
                     type="number"
                     className="form-input"

@@ -78,10 +78,46 @@ const Reports = () => {
   const handleCompileReport = async () => {
     try {
       setCompiling(true);
-      await api.post(`/projects/${selectedProjectId}/reports`);
+      await api.post(`/projects/${selectedProjectId}/reports`, {
+        date: new Date().toISOString()
+      });
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to trigger report compilation.');
       setCompiling(false);
+    }
+  };
+
+  const handleViewPdf = async (reportId) => {
+    // Open blank tab immediately to prevent popup blockers from blocking async window.open
+    const newTab = window.open('', '_blank');
+    if (newTab) {
+      newTab.document.write('<p style="font-family: sans-serif; text-align: center; margin-top: 100px; color: #666;">Loading daily report PDF summary...</p>');
+    }
+
+    try {
+      const response = await api.get(`/projects/${selectedProjectId}/reports/${reportId}/pdf`, {
+        responseType: 'blob'
+      });
+      const file = new Blob([response.data], { type: 'application/pdf' });
+      const fileURL = URL.createObjectURL(file);
+      
+      if (newTab) {
+        newTab.location.href = fileURL;
+      } else {
+        // Fallback: direct download
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = `report_${reportId}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    } catch (err) {
+      if (newTab) {
+        newTab.close();
+      }
+      alert('Failed to load report PDF summary.');
+      console.error('Error opening report PDF:', err);
     }
   };
 
@@ -197,16 +233,14 @@ const Reports = () => {
                         {formatDate(report.date)}
                       </div>
                       {report.pdfUrl && (
-                        <a
-                          href={report.pdfUrl}
-                          target="_blank"
-                          rel="noreferrer"
+                        <button
+                          onClick={() => handleViewPdf(report.id || report._id)}
                           className="btn btn-secondary"
-                          style={{ padding: '4px 8px', fontSize: '11px' }}
+                          style={{ padding: '4px 8px', fontSize: '11px', cursor: 'pointer' }}
                         >
                           <span>View PDF Summary</span>
                           <ArrowRight size={12} />
-                        </a>
+                        </button>
                       )}
                     </div>
 
