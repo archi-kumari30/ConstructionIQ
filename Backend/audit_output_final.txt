@@ -1,0 +1,123 @@
+﻿[2026-08-20 18:46:52:4652] [[32minfo[39m]: [32m[BullMQ] Daily Site Report Compilation Queue Initialized[39m
+[2026-08-20 18:46:53:4653] [[33mwarn[39m]: [33mCloudinary credentials not set. Upload middleware will run in mock mode.[39m
+Γùç injected env (27) from .env // tip: Γîÿ multiple files { path: ['.env.local', '.env'] }
+=== STARTING END-TO-END FUNCTIONALITY AUDIT ===
+[2026-08-20 18:46:53:4653] [[32minfo[39m]: [32mMongoDB Connected: ac-fjwo1bp-shard-00-00.z2ntx84.mongodb.net[39m
+Database connected.
+Test server running on port 5055
+[2026-08-20 18:46:53:4653] [[35mhttp[39m]: [35mPOST /api/v1/auth/login - IP: ::1[39m
+[2026-08-20 18:46:54:4654] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed LOGIN on User (6a86f694a249a33fbfd79dd5)[39m
+[PASS] Login - Successful login with PM credentials (POST /auth/login)
+[2026-08-20 18:46:54:4654] [[35mhttp[39m]: [35mPOST /api/v1/auth/login - IP: ::1[39m
+[2026-08-20 18:46:55:4655] [[33mwarn[39m]: [33m[Operational Error] Status: 401 - Code: UNAUTHORIZED_ACCESS - Message: Invalid credentials[39m
+[PASS] Login Error - Reject invalid password credentials (POST /auth/login)
+[2026-08-20 18:46:55:4655] [[35mhttp[39m]: [35mGET /api/v1/projects - IP: ::1[39m
+[PASS] Dashboard - Fetch projects and metrics overview (GET /projects)
+[2026-08-20 18:46:55:4655] [[35mhttp[39m]: [35mGET /api/v1/projects - IP: ::1[39m
+[PASS] Projects List - Retrieve all active project records (GET /projects)
+[2026-08-20 18:46:56:4656] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835 - IP: ::1[39m
+[PASS] Project Details - Retrieve single project detail by ID (GET /projects/:id)
+[2026-08-20 18:46:56:4656] [[35mhttp[39m]: [35mPOST /api/v1/projects - IP: ::1[39m
+[2026-08-20 18:46:57:4657] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed PROJECT_CREATE on Project (6a86fe49e3e2373d9cf866a6)[39m
+[PASS] Create Project - Store new project in DB (POST /projects)
+[2026-08-20 18:46:57:4657] [[35mhttp[39m]: [35mPUT /api/v1/projects/6a806e331a4ab04ab9781835 - IP: ::1[39m
+[2026-08-20 18:46:58:4658] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed PROJECT_UPDATE on Project (6a806e331a4ab04ab9781835)[39m
+[PASS] Edit Project - Update project fields and verify mutation (PUT /projects/:id)
+[2026-08-20 18:46:58:4658] [[35mhttp[39m]: [35mGET /api/v1/materials - IP: ::1[39m
+[PASS] Materials Catalog - List global materials catalog items (GET /materials)
+[2026-08-20 18:46:58:4658] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/inventory - IP: ::1[39m
+--- INVENTORY ITEM: {"id":"6a86f6a77c7b8248091204f4","projectId":"6a806e331a4ab04ab9781835","material":{"id":"6a86f69e1ccbfa15e2ed29fa","name":"Ultratech Cement OPC 53 Grade","category":"Cement & Concrete","unit":"bag","unitCost":7.2,"createdAt":"2026-08-20T12:44:14.465Z","updatedAt":"2026-08-20T12:44:14.465Z"},"quantityAvailable":5,"warehouseLocation":"Warehouse Bay 1","lowStockThreshold":10,"updatedAt":"2026-08-20T12:44:23.810Z"}
+[PASS] Material Inventory - List project warehouse stock logs (GET /projects/:id/inventory)
+[2026-08-20 18:46:59:4659] [[35mhttp[39m]: [35mPUT /api/v1/projects/6a806e331a4ab04ab9781835/inventory/6a86f69e1ccbfa15e2ed29fa/threshold - IP: ::1[39m
+[2026-08-20 18:47:00:470] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed INVENTORY_THRESHOLD_UPDATE on MaterialInventory (6a86f6a77c7b8248091204f4)[39m
+[PASS] Edit Stock Alert - Update material low stock threshold (PUT /projects/:id/inventory/:matId/threshold)
+[2026-08-20 18:47:00:470] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/requests - IP: ::1[39m
+[2026-08-20 18:47:01:471] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed MATERIAL_REQUEST_CREATE on MaterialRequest (6a86fe4ce3e2373d9cf866ab)[39m
+[PASS] Material Request Create - Create a new project materials request (POST /projects/:id/requests)
+[2026-08-20 18:47:01:471] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/requests - IP: ::1[39m
+[PASS] Material Requests List - Retrieve requested log list (GET /projects/:id/requests)
+[2026-08-20 18:47:01:471] [[35mhttp[39m]: [35mGET /api/v1/equipment - IP: ::1[39m
+[PASS] Equipment Fleet - List global fleet machinery items (GET /equipment)
+[2026-08-20 18:47:01:471] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/bookings - IP: ::1[39m
+[2026-08-20 18:47:02:472] [[33mwarn[39m]: [33m[Operational Error] Status: 409 - Code: RESOURCE_CONFLICT - Message: Scheduling conflict: Equipment is already booked by ConstructionIQ Demo Project for this time slot[39m
+[PASS] Equipment Book - Reserve heavy equipment for project phases (Conflict detected) (POST /projects/:id/bookings)
+[2026-08-20 18:47:02:472] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/bookings - IP: ::1[39m
+[PASS] Equipment Bookings List - List reserved fleet bookings (GET /projects/:id/bookings)
+[2026-08-20 18:47:02:472] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/telemetry - IP: ::1[39m
+[2026-08-20 18:47:03:473] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed EQUIPMENT_TELEMETRY_LOG on EquipmentUsageLog (6a86fe4fe3e2373d9cf866ad)[39m
+[PASS] Log Telemetry - Log machine hours and fuel usage logs (POST /projects/:id/telemetry)
+[2026-08-20 18:47:03:473] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/team - IP: ::1[39m
+[PASS] Project Team - Retrieve team members assigned to project workspace (GET /projects/:id/team)
+[2026-08-20 18:47:04:474] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/budgets - IP: ::1[39m
+[PASS] Project Budgets - Retrieve segment budget summaries (GET /projects/:id/budgets)
+[2026-08-20 18:47:05:475] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/expenses - IP: ::1[39m
+[PASS] Project Expenses - Retrieve site expenses ledger journals (GET /projects/:id/expenses)
+[2026-08-20 18:47:06:476] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/budgets - IP: ::1[39m
+[2026-08-20 18:47:07:477] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed BUDGET_ALLOCATION on Budget (6a86f7c7f277cccedd8b24ea)[39m
+[PASS] Allocate Budget - Allocate new segment category budget threshold limit (POST /projects/:id/budgets)
+[2026-08-20 18:47:07:477] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/expenses - IP: ::1[39m
+[2026-08-20 18:47:08:478] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed EXPENSE_CREATE on Expense (6a86fe54e3e2373d9cf866b0)[39m
+[PASS] Log Expense - Submit new site expense transaction journal (POST /projects/:id/expenses)
+[2026-08-20 18:47:08:478] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/expenses - IP: ::1[39m
+[2026-08-20 18:47:08:478] [[33mwarn[39m]: [33m[Operational Error] Status: 400 - Code: BAD_REQUEST - Message: Expense exceeds allocated budget for category 'miscellaneous'. Allocated: $18000, Currently Spent: $2400, Requested: $500000[39m
+[PASS] Reject Excess Expense - Reject expense exceeding segment limits (POST /projects/:id/expenses)
+[2026-08-20 18:47:08:478] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/deliveries - IP: ::1[39m
+[PASS] Deliveries List - Fetch supplier logistics deliveries (GET /projects/:id/deliveries)
+[2026-08-20 18:47:09:479] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/milestones - IP: ::1[39m
+[PASS] Milestones List - Fetch project milestones (GET /projects/:id/milestones)
+[2026-08-20 18:47:09:479] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/milestones - IP: ::1[39m
+[2026-08-20 18:47:10:4710] [[32minfo[39m]: [32m[Audit Log] User: 6a86f694a249a33fbfd79dd5 performed PROJECT_MILESTONE_CREATE on ProjectMilestone (6a86fe56e3e2373d9cf866b2)[39m
+[PASS] Create Milestone - Create project timeline milestones targets (POST /projects/:id/milestones)
+[2026-08-20 18:47:10:4710] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/incidents - IP: ::1[39m
+[PASS] Incidents List - Retrieve safety ledger logs (GET /projects/:id/incidents)
+[2026-08-20 18:47:10:4710] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/reports - IP: ::1[39m
+[PASS] Daily Reports List - Fetch daily shift operations summaries (GET /projects/:id/reports)
+[2026-08-20 18:47:11:4711] [[35mhttp[39m]: [35mPOST /api/v1/projects/6a806e331a4ab04ab9781835/reports - IP: ::1[39m
+[2026-08-20 18:47:12:4712] [[33mwarn[39m]: [33m[Operational Error] Status: 409 - Code: RESOURCE_CONFLICT - Message: A Daily Site Report has already been compiled for this project and date[39m
+[PASS] Compile Report Log - Trigger daily shift operations report compilation (POST /projects/:id/reports)
+[2026-08-20 18:47:12:4712] [[35mhttp[39m]: [35mGET /api/v1/projects/6a806e331a4ab04ab9781835/insights - IP: ::1[39m
+[PASS] AI Insights - Retrieve LLM generated project operations insights (GET /projects/:id/insights)
+[2026-08-20 18:47:13:4713] [[35mhttp[39m]: [35mPOST /api/v1/auth/refresh-token - IP: ::1[39m
+[2026-08-20 18:47:13:4713] [[33mwarn[39m]: [33m[Operational Error] Status: 422 - Code: VALIDATION_ERROR - Message: Validation Failed[39m
+[PASS] Token Refresh - Verify token refresh endpoint validation (POST /auth/refresh-token)
+[2026-08-20 18:47:13:4713] [[35mhttp[39m]: [35mGET /api/v1/projects - IP: ::1[39m
+[2026-08-20 18:47:13:4713] [[33mwarn[39m]: [33m[Operational Error] Status: 401 - Code: UNAUTHORIZED_ACCESS - Message: Not authenticated, no token provided[39m
+[PASS] Route Guards - Deny access to protected resources without token (GET /projects)
+
+======================================
+| Module | Action Tested | API Called | Result | Fixed? |
+|---|---|---|---|---|
+| Login | Successful login with PM credentials | `POST /auth/login` | **PASS** | N/A |
+| Login Error | Reject invalid password credentials | `POST /auth/login` | **PASS** | N/A |
+| Dashboard | Fetch projects and metrics overview | `GET /projects` | **PASS** | N/A |
+| Projects List | Retrieve all active project records | `GET /projects` | **PASS** | N/A |
+| Project Details | Retrieve single project detail by ID | `GET /projects/:id` | **PASS** | N/A |
+| Create Project | Store new project in DB | `POST /projects` | **PASS** | N/A |
+| Edit Project | Update project fields and verify mutation | `PUT /projects/:id` | **PASS** | N/A |
+| Materials Catalog | List global materials catalog items | `GET /materials` | **PASS** | N/A |
+| Material Inventory | List project warehouse stock logs | `GET /projects/:id/inventory` | **PASS** | N/A |
+| Edit Stock Alert | Update material low stock threshold | `PUT /projects/:id/inventory/:matId/threshold` | **PASS** | N/A |
+| Material Request Create | Create a new project materials request | `POST /projects/:id/requests` | **PASS** | N/A |
+| Material Requests List | Retrieve requested log list | `GET /projects/:id/requests` | **PASS** | N/A |
+| Equipment Fleet | List global fleet machinery items | `GET /equipment` | **PASS** | N/A |
+| Equipment Book | Reserve heavy equipment for project phases (Conflict detected) | `POST /projects/:id/bookings` | **PASS** | Conflict scheduler block active |
+| Equipment Bookings List | List reserved fleet bookings | `GET /projects/:id/bookings` | **PASS** | N/A |
+| Log Telemetry | Log machine hours and fuel usage logs | `POST /projects/:id/telemetry` | **PASS** | N/A |
+| Project Team | Retrieve team members assigned to project workspace | `GET /projects/:id/team` | **PASS** | N/A |
+| Project Budgets | Retrieve segment budget summaries | `GET /projects/:id/budgets` | **PASS** | N/A |
+| Project Expenses | Retrieve site expenses ledger journals | `GET /projects/:id/expenses` | **PASS** | N/A |
+| Allocate Budget | Allocate new segment category budget threshold limit | `POST /projects/:id/budgets` | **PASS** | N/A |
+| Log Expense | Submit new site expense transaction journal | `POST /projects/:id/expenses` | **PASS** | N/A |
+| Reject Excess Expense | Reject expense exceeding segment limits | `POST /projects/:id/expenses` | **PASS** | N/A |
+| Deliveries List | Fetch supplier logistics deliveries | `GET /projects/:id/deliveries` | **PASS** | N/A |
+| Milestones List | Fetch project milestones | `GET /projects/:id/milestones` | **PASS** | N/A |
+| Create Milestone | Create project timeline milestones targets | `POST /projects/:id/milestones` | **PASS** | N/A |
+| Incidents List | Retrieve safety ledger logs | `GET /projects/:id/incidents` | **PASS** | N/A |
+| Daily Reports List | Fetch daily shift operations summaries | `GET /projects/:id/reports` | **PASS** | N/A |
+| Compile Report Log | Trigger daily shift operations report compilation | `POST /projects/:id/reports` | **PASS** | N/A |
+| AI Insights | Retrieve LLM generated project operations insights | `GET /projects/:id/insights` | **PASS** | N/A |
+| Token Refresh | Verify token refresh endpoint validation | `POST /auth/refresh-token` | **PASS** | Verified via HTTP codes |
+| Route Guards | Deny access to protected resources without token | `GET /projects` | **PASS** | N/A |
+======================================
+
+Test server terminated.

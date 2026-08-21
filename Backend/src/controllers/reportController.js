@@ -1,4 +1,5 @@
 import reportService from '../services/reportService.js';
+import projectService from '../services/projectService.js';
 import ApiResponse from '../utils/apiResponse.js';
 import DailySiteReportDto from '../dto/dailySiteReportDto.js';
 import IncidentDto from '../dto/incidentDto.js';
@@ -108,6 +109,18 @@ const listInsights = asyncWrapper(async (req, res) => {
   }, HTTP_CODES.OK);
 });
 
+const downloadReportPdf = asyncWrapper(async (req, res) => {
+  const { id, projectId } = req.params;
+  const report = await reportService.getDailyReportById(id, req.user);
+  const project = await projectService.getProjectById(projectId);
+
+  const pdfBuffer = reportService.generatePdfReportBuffer(report, project);
+
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `inline; filename="report_${id}.pdf"`);
+  return res.send(pdfBuffer);
+});
+
 export {
   compileDailyReport,
   getDailyReport,
@@ -116,6 +129,7 @@ export {
   updateIncident,
   getIncident,
   listIncidents,
-  listInsights
+  listInsights,
+  downloadReportPdf
 };
-export default { compileDailyReport, getDailyReport, listDailyReports, logIncident, updateIncident, getIncident, listIncidents, listInsights };
+export default { compileDailyReport, getDailyReport, listDailyReports, logIncident, updateIncident, getIncident, listIncidents, listInsights, downloadReportPdf };

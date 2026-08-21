@@ -174,6 +174,39 @@ class ReportService {
   async listInsights(projectId, params) {
     return await aiInsightRepository.findByProject(projectId, params);
   }
+
+  generatePdfReportBuffer(report, project) {
+    const lines = [
+      `Project: ${project.name}`,
+      `Date: ${new Date(report.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}`,
+      `Workforce Headcount: ${report.laborHeadcount || 0} present`,
+      `Incident Count: ${report.incidentCount || 0} open`,
+      `Notes: ${report.notes || 'None'}`
+    ];
+    
+    let contentStream = `BT\n/F1 24 Tf\n50 780 Td\n(ConstructionIQ Daily Site Report) Tj\n/F1 14 Tf\n`;
+    lines.forEach(line => {
+      contentStream += `0 -30 Td\n(${line}) Tj\n`;
+    });
+    contentStream += `ET`;
+
+    const streamLength = Buffer.byteLength(contentStream);
+    
+    // Construct the PDF parts
+    const header = `%PDF-1.4\n`;
+    const obj1 = `1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n`;
+    const obj2 = `2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n`;
+    const obj3 = `3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> >>\nendobj\n`;
+    const obj4 = `4 0 obj\n<< /Length ${streamLength} >>\nstream\n${contentStream}\nendstream\nendobj\n`;
+
+    const body = header + obj1 + obj2 + obj3 + obj4;
+    
+    // Add cross-reference and trailer
+    const bodyLength = Buffer.byteLength(body);
+    const xref = `xref\n0 5\n0000000000 65535 f\n0000000009 00000 n\n0000000058 00000 n\n0000000115 00000 n\n0000000300 00000 n\ntrailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n${bodyLength}\n%%EOF\n`;
+    
+    return Buffer.from(body + xref);
+  }
 }
 
 export default new ReportService();

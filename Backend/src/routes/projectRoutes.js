@@ -264,6 +264,7 @@ router.put(
 // --- Daily Site Reports ---
 router.get('/reports/:id', reportController.getDailyReport);
 router.get('/:projectId/reports', checkProjectAccess, reportController.listDailyReports);
+router.get('/:projectId/reports/:id/pdf', checkProjectAccess, reportController.downloadReportPdf);
 
 router.post(
   '/:projectId/reports',
